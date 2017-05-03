@@ -20,8 +20,12 @@ public class CassandraUserRepository implements UserRepository {
 
 
     @Override
-    public Optional<User> load(UserId id) {
-        return userRepository.findByUserId(id.getValue()).map(DTODomainConverter::fromUserDTO);
+    public CompletableFuture<Optional<User>> load(UserId id) {
+        return
+                userRepository
+                        .findByUserId(id.getValue())
+                        .thenApplyAsync(Optional::ofNullable)
+                        .thenApplyAsync(user -> user.map((DTODomainConverter::fromUserDTO)));
     }
 
     @Override

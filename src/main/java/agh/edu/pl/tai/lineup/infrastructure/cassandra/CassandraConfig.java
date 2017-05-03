@@ -6,10 +6,8 @@ import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.java.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.mapping.BasicCassandraMappingContext;
 import org.springframework.data.cassandra.mapping.CassandraMappingContext;
-import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 @Configuration
-@EnableCassandraRepositories
 public class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Override
@@ -18,9 +16,8 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     }
 
     @Bean
-    public CassandraClusterFactoryBean cluster() {
-        CassandraClusterFactoryBean cluster =
-                new CassandraClusterFactoryBean();
+    public CassandraClusterFactoryBean cluster() { // todo add env here
+        CassandraClusterFactoryBean cluster = new CassandraClusterFactoryBean();
         cluster.setContactPoints("127.0.0.1");
         cluster.setPort(9042);
         return cluster;
