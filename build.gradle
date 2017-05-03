@@ -1,0 +1,48 @@
+group 'agh.edu.pl'
+version 'latest'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'line-up'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.testng:testng:6.8.8'
+    compile 'com.jayway.restassured:rest-assured:2.3.2'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'org.json:json:20160212'
+
+    compile 'net.jodah:failsafe:0.9.2'
+    compile 'com.google.guava:guava:19.0'
+
+    testCompile 'com.nanohttpd:nanohttpd:2.2.0'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.jayway.jsonpath:json-path'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
