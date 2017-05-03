@@ -6,8 +6,10 @@ import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.java.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.mapping.BasicCassandraMappingContext;
 import org.springframework.data.cassandra.mapping.CassandraMappingContext;
+import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 @Configuration
+@EnableCassandraRepositories
 public class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Override
