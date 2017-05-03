@@ -11,7 +11,7 @@ public class DTODomainConverter {
     }
 
     public static UserDTO toUserDTO(User user) {
-        return new UserDTO(user.getUserId().getValue(), user.getEmail(), user.getPassword());
+        return new UserDTO(user.getUserId().getValue(), user.getEmail(), user.getHashedPassword());
     }
 
 }

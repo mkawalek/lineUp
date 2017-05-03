@@ -1,19 +1,20 @@
 package agh.edu.pl.tai.lineup.domain.user.aggregate;
 
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
+import agh.edu.pl.tai.lineup.infrastructure.utils.PasswordHasher;
 import agh.edu.pl.tai.lineup.infrastructure.utils.Validator;
 
 public class User {
 
     private UserId userId;
     private String email;
-    private String password;
+    private String hashedPassword;
 
     public User(UserId userId, String email, String password) {
         validate(email, password);
         this.userId = userId;
         this.email = email;
-        this.password = password;
+        this.hashedPassword = PasswordHasher.encrypt(password);
     }
 
     private void validate(String email, String password) {
@@ -36,7 +37,7 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 }
