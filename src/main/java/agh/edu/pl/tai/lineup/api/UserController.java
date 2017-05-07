@@ -2,7 +2,10 @@ package agh.edu.pl.tai.lineup.api;
 
 import agh.edu.pl.tai.lineup.api.requests.UserCreationRequest;
 import agh.edu.pl.tai.lineup.api.responses.EmailResponse;
-import agh.edu.pl.tai.lineup.api.responses.IdResponse;
+import agh.edu.pl.tai.lineup.api.responses.RegistrationResponse;
+import agh.edu.pl.tai.lineup.api.security.AuthenticatedUser;
+import agh.edu.pl.tai.lineup.api.security.LoggedUser;
+import agh.edu.pl.tai.lineup.domain.user.TokenAuthenticator;
 import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.aggregate.User;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
@@ -19,27 +22,29 @@ import java.util.concurrent.CompletableFuture;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final TokenAuthenticator tokenAuthenticator;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, TokenAuthenticator tokenAuthenticator) {
         this.userRepository = userRepository;
+        this.tokenAuthenticator = tokenAuthenticator;
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public CompletableFuture<IdResponse> createSubmitWorkContest(@RequestBody UserCreationRequest request) throws HttpResponseException {
+    public CompletableFuture<RegistrationResponse> createSubmitWorkContest(@RequestBody UserCreationRequest request) throws HttpResponseException {
         return userRepository.findByEmail(request.getEmail()).thenApplyAsync(users -> {
             if (users.isEmpty()) {
                 User user = new User(UserId.of(RandomIdGenerator.next()), request.getEmail(), request.getPassword());
 
                 userRepository.save(user);
 
-                return new IdResponse(user.getUserId().getValue());
+                return new RegistrationResponse(user.getUserId().getValue(), tokenAuthenticator.provideToken(user.getUserId()));
             } else throw new ValidationException("email already in use");
         });
     }
 
     @RequestMapping(value = "/users/{userId}")
-    public CompletableFuture<EmailResponse> getUsersEmail(@PathVariable("userId") String userId) {
+    public CompletableFuture<EmailResponse> getUsersEmail(@PathVariable("userId") String userId, @LoggedUser AuthenticatedUser authenticatedUser) {
         return userRepository
                 .load(UserId.of(userId))
                 .thenApplyAsync(user -> user
