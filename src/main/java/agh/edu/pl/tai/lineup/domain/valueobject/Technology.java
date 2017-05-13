@@ -1,6 +1,6 @@
-package agh.edu.pl.tai.lineup.domain.user.valueobject;
+package agh.edu.pl.tai.lineup.domain.valueobject;
 
-public enum Skill {
+public enum Technology {
 
     JAVA, HASKELL, ANGULAR, JAVASCRIPT, NODEJS, SCALA, PYTHON, RUBY, SQL, MONGODB, CASSANDRA, KAFKA, REACT, REACT_NATIVE, KOTLIN;
 

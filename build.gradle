@@ -30,6 +30,7 @@ targetCompatibility = 1.8
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.data:spring-data-cassandra:1.5.3.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-mongodb:1.5.3.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-security'
 
     compile 'com.squareup.okhttp3:okhttp:3.4.1'

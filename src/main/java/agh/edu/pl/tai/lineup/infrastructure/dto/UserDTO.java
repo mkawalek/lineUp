@@ -3,6 +3,8 @@ package agh.edu.pl.tai.lineup.infrastructure.dto;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import java.util.Set;
+
 @Table
 public class UserDTO {
 
@@ -10,11 +12,23 @@ public class UserDTO {
     private String userId;
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
+    private Integer age;
+    private Set<String> technologies;
+    private String department;
+    private String fieldOfStudy;
 
-    public UserDTO(String userId, String email, String password) {
+    public UserDTO(String userId, String email, String password, String firstName, String lastName, Integer age, Set<String> technologies, String department, String fieldOfStudy) {
         this.userId = userId;
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.technologies = technologies;
+        this.department = department;
+        this.fieldOfStudy = fieldOfStudy;
     }
 
     public String getUserId() {
@@ -29,4 +43,27 @@ public class UserDTO {
         return password;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public Set<String> getTechnologies() {
+        return technologies;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public String getFieldOfStudy() {
+        return fieldOfStudy;
+    }
 }

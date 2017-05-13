@@ -19,7 +19,7 @@ public class Validator {
     }
 
     public <T> Validator onNull(T object, String header) {
-        logs.add(new Log(object != null, header, "isNull"));
+        logs.add(new Log(object != null, header, "null"));
         return this;
     }
 
@@ -60,17 +60,9 @@ public class Validator {
         }
 
         private Optional<Error> validate() {
-            if (!condition)
-                return Optional.of(new Error(error));
-            else {
-                return Optional.empty();
-            }
+            if (!condition) return Optional.of(new Error(error));
+            else return Optional.empty();
         }
-
-    }
-
-    public List<Log> getLogs() {
-        return Collections.unmodifiableList(logs);
     }
 }
 

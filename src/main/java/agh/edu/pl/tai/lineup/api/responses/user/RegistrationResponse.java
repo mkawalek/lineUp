@@ -1,4 +1,4 @@
-package agh.edu.pl.tai.lineup.api.responses;
+package agh.edu.pl.tai.lineup.api.responses.user;
 
 public class RegistrationResponse {
 

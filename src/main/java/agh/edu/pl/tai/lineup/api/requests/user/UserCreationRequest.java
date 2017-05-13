@@ -1,10 +1,10 @@
-package agh.edu.pl.tai.lineup.api.requests;
+package agh.edu.pl.tai.lineup.api.requests.user;
 
 import agh.edu.pl.tai.lineup.domain.user.valueobject.Department;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.FieldOfStudy;
-import agh.edu.pl.tai.lineup.domain.user.valueobject.Skill;
+import agh.edu.pl.tai.lineup.domain.valueobject.Technology;
 
-import java.util.List;
+import java.util.Set;
 
 public class UserCreationRequest {
 
@@ -13,7 +13,7 @@ public class UserCreationRequest {
     private String firstName;
     private String lastName;
     private Integer age;
-    private List<Skill> skills;
+    private Set<Technology> technologies;
     private Department department;
     private FieldOfStudy fieldOfStudy;
 
@@ -59,12 +59,12 @@ public class UserCreationRequest {
         this.age = age;
     }
 
-    public List<Skill> getSkills() {
-        return skills;
+    public Set<Technology> getTechnologies() {
+        return technologies;
     }
 
-    public void setSkills(List<Skill> skills) {
-        this.skills = skills;
+    public void setTechnologies(Set<Technology> technologies) {
+        this.technologies = technologies;
     }
 
     public Department getDepartment() {

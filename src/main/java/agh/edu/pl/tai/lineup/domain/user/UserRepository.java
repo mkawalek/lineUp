@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 public interface UserRepository {
 
     CompletableFuture<Optional<User>> load(UserId id);
-    void save(User user);
+    CompletableFuture<UserId> save(User user);
     CompletableFuture<List<User>> findByEmail(String email);
 
 }

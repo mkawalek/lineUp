@@ -1,4 +1,4 @@
-package agh.edu.pl.tai.lineup.infrastructure.cassandra;
+package agh.edu.pl.tai.lineup.infrastructure.cassandra.user;
 
 import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.aggregate.User;
@@ -29,8 +29,8 @@ public class CassandraUserRepository implements UserRepository {
     }
 
     @Override
-    public void save(User user) {
-        userRepository.insert(DTODomainConverter.toUserDTO(user));
+    public CompletableFuture<UserId> save(User user) {
+        return CompletableFuture.supplyAsync(() -> userRepository.insert(DTODomainConverter.toUserDTO(user))).thenApplyAsync(u -> UserId.of(u.getUserId()));
     }
 
     @Override

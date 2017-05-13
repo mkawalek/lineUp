@@ -1,4 +1,4 @@
-package agh.edu.pl.tai.lineup.infrastructure.cassandra;
+package agh.edu.pl.tai.lineup.infrastructure.cassandra.user;
 
 import agh.edu.pl.tai.lineup.infrastructure.dto.UserDTO;
 import org.springframework.data.cassandra.repository.CassandraRepository;
@@ -10,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface CassandraCRUDUserRepository extends CassandraRepository<UserDTO> {
 
+    @Async
     CompletableFuture<UserDTO> findByUserId(String userId);
 
     @Async
