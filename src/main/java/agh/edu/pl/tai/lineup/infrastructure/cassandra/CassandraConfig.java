@@ -1,7 +1,9 @@
 package agh.edu.pl.tai.lineup.infrastructure.cassandra;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.java.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.mapping.BasicCassandraMappingContext;
@@ -12,14 +14,17 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Override
     protected String getKeyspaceName() {
-        return "users";
+        return "line_up_users";
     }
 
+    @Autowired
+    private Environment environment;
+
     @Bean
-    public CassandraClusterFactoryBean cluster() { // todo add env here
+    public CassandraClusterFactoryBean cluster() {
         CassandraClusterFactoryBean cluster = new CassandraClusterFactoryBean();
-        cluster.setContactPoints("127.0.0.1");
-        cluster.setPort(9042);
+        cluster.setContactPoints(environment.getProperty("cassandra.contactpoints"));
+        cluster.setPort(environment.getProperty("cassandra.port", Integer.class));
         return cluster;
     }
 
