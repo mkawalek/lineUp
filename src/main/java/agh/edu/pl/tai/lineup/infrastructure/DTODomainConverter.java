@@ -26,7 +26,7 @@ public class DTODomainConverter {
                 userDTO.getLastName(),
                 userDTO.getTechnologies().stream().map(Technology::valueOf).collect(Collectors.toSet()),
                 Department.valueOf(userDTO.getDepartment()),
-                FieldOfStudy.valueOf(userDTO.getDepartment())
+                FieldOfStudy.valueOf(userDTO.getFieldOfStudy())
         );
     }
 
