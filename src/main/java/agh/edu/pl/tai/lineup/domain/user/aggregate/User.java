@@ -48,7 +48,6 @@ public class User {
                 .on(!password.isEmpty(), "user.password", "empty")
                 .on(!firstName.isEmpty(), "user.firstName", "empty")
                 .on(!lastName.isEmpty(), "user.lastName", "empty")
-                .on(!technologies.isEmpty(), "user.technologies", "empty") // TODO check wether department and field of study is OK
                 .on(email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"), "user.email", "invalid")
                 .validateAndThrow();
     }
