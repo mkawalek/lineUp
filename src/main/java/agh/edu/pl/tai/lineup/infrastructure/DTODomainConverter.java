@@ -24,7 +24,6 @@ public class DTODomainConverter {
                 userDTO.getPassword(),
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
-                userDTO.getAge(),
                 userDTO.getTechnologies().stream().map(Technology::valueOf).collect(Collectors.toSet()),
                 Department.valueOf(userDTO.getDepartment()),
                 FieldOfStudy.valueOf(userDTO.getDepartment())
@@ -38,7 +37,6 @@ public class DTODomainConverter {
                 user.getHashedPassword(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getAge(),
                 user.getTechnologies().stream().map(Enum::name).collect(Collectors.toSet()),
                 user.getDepartment().name(),
                 user.getFieldOfStudy().name()

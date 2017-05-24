@@ -34,7 +34,7 @@ public class UserController {
         return userRepository.findByEmail(request.getEmail()).thenApplyAsync(users -> {
             if (users.isEmpty()) {
                 return new User(UserId.of(RandomIdGenerator.next()), request.getEmail(), request.getPassword(), request.getFirstName(),
-                        request.getLastName(), request.getAge(), request.getTechnologies(), request.getDepartment(), request.getFieldOfStudy());
+                        request.getLastName(), request.getTechnologies(), request.getDepartment(), request.getFieldOfStudy());
             } else throw new ValidationException("email_already_in_use");
         }).thenCompose(user -> userRepository.save(user).thenApply(userId -> new RegistrationResponse(userId.getValue(), tokenAuthenticator.provideToken(userId))));
     }

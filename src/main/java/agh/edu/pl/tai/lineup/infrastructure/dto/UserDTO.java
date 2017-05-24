@@ -12,18 +12,16 @@ public class UserDTO {
     private String password;
     private String firstName;
     private String lastName;
-    private Integer age;
     private Set<String> technologies;
     private String department;
     private String fieldOfStudy;
 
-    public UserDTO(String id, String email, String password, String firstName, String lastName, Integer age, Set<String> technologies, String department, String fieldOfStudy) {
+    public UserDTO(String id, String email, String password, String firstName, String lastName, Set<String> technologies, String department, String fieldOfStudy) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
         this.technologies = technologies;
         this.department = department;
         this.fieldOfStudy = fieldOfStudy;
@@ -47,10 +45,6 @@ public class UserDTO {
 
     public String getLastName() {
         return lastName;
-    }
-
-    public Integer getAge() {
-        return age;
     }
 
     public Set<String> getTechnologies() {
