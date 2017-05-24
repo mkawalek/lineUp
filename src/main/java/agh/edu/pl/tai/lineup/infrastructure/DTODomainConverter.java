@@ -19,7 +19,7 @@ public class DTODomainConverter {
 
     public static User fromUserDTO(UserDTO userDTO) {
         return new User(
-                UserId.of(userDTO.getUserId()),
+                UserId.of(userDTO.getId()),
                 userDTO.getEmail(),
                 userDTO.getPassword(),
                 userDTO.getFirstName(),
@@ -47,7 +47,7 @@ public class DTODomainConverter {
 
     public static Project fromProjectDTO(ProjectDTO projectDTO) {
         return new Project(
-                ProjectId.of(projectDTO.getProjectId()),
+                ProjectId.of(projectDTO.getId()),
                 projectDTO.getName(),
                 projectDTO.getDescription(),
                 projectDTO.getVersionControlUrl(),

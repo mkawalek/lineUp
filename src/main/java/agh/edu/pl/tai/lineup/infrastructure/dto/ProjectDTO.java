@@ -9,7 +9,7 @@ import java.util.Set;
 public class ProjectDTO {
 
     @Id
-    private String projectId;
+    private final String id;
     private String name;
     private String description;
     private Optional<String> versionControlUrl;
@@ -21,8 +21,8 @@ public class ProjectDTO {
     private Optional<LocalDateTime> ended;
 
 
-    public ProjectDTO(String projectId, String name, String description, Optional<String> versionControlUrl, Set<String> projectTechnologies, Set<String> projectParticipants, String projectStatus, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
-        this.projectId = projectId;
+    public ProjectDTO(String id, String name, String description, Optional<String> versionControlUrl, Set<String> projectTechnologies, Set<String> projectParticipants, String projectStatus, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.versionControlUrl = versionControlUrl;
@@ -34,8 +34,8 @@ public class ProjectDTO {
         this.ended = ended;
     }
 
-    public String getProjectId() {
-        return projectId;
+    public String getId() {
+        return id;
     }
 
     public String getName() {

@@ -29,7 +29,7 @@ public class MongoProjectRepository implements ProjectRepository {
 
     @Override
     public CompletableFuture<ProjectId> save(Project project) {
-        return CompletableFuture.supplyAsync(() -> projectRepository.save(DTODomainConverter.toProjectDTO(project))).thenApplyAsync(p -> ProjectId.of(p.getProjectId()));
+        return CompletableFuture.supplyAsync(() -> projectRepository.save(DTODomainConverter.toProjectDTO(project))).thenApplyAsync(p -> ProjectId.of(p.getId()));
     }
 
     @Override

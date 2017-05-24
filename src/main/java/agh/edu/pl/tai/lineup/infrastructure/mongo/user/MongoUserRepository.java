@@ -30,7 +30,7 @@ public class MongoUserRepository implements UserRepository {
 
     @Override
     public CompletableFuture<UserId> save(User user) {
-        return CompletableFuture.supplyAsync(() -> userRepository.insert(DTODomainConverter.toUserDTO(user))).thenApplyAsync(u -> UserId.of(u.getUserId()));
+        return CompletableFuture.supplyAsync(() -> userRepository.insert(DTODomainConverter.toUserDTO(user))).thenApplyAsync(u -> UserId.of(u.getId()));
     }
 
     @Override

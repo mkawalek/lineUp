@@ -7,7 +7,7 @@ import java.util.Set;
 public class UserDTO {
 
     @Id
-    private String userId;
+    private final String id;
     private String email;
     private String password;
     private String firstName;
@@ -17,8 +17,8 @@ public class UserDTO {
     private String department;
     private String fieldOfStudy;
 
-    public UserDTO(String userId, String email, String password, String firstName, String lastName, Integer age, Set<String> technologies, String department, String fieldOfStudy) {
-        this.userId = userId;
+    public UserDTO(String id, String email, String password, String firstName, String lastName, Integer age, Set<String> technologies, String department, String fieldOfStudy) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -29,8 +29,8 @@ public class UserDTO {
         this.fieldOfStudy = fieldOfStudy;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
     public String getEmail() {
