@@ -1,7 +1,7 @@
 package agh.edu.pl.tai.lineup.api.controllers;
 
 import agh.edu.pl.tai.lineup.api.requests.user.UserAuthenticationRequest;
-import agh.edu.pl.tai.lineup.api.requests.user.UserCreationRequest;
+import agh.edu.pl.tai.lineup.api.requests.user.UserRegistrationRequest;
 import agh.edu.pl.tai.lineup.api.responses.user.RegistrationResponse;
 import agh.edu.pl.tai.lineup.domain.user.TokenAuthenticator;
 import agh.edu.pl.tai.lineup.domain.user.UserRepository;
@@ -10,10 +10,8 @@ import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 import agh.edu.pl.tai.lineup.infrastructure.RandomIdGenerator;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -30,7 +28,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public CompletableFuture<RegistrationResponse> registerUser(@RequestBody UserCreationRequest request) {
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public CompletableFuture<RegistrationResponse> registerUser(@RequestBody UserRegistrationRequest request) {
         return userRepository.findByEmail(request.getEmail()).thenApplyAsync(users -> {
             if (users.isEmpty()) {
                 return new User(UserId.of(RandomIdGenerator.next()), request.getEmail(), request.getPassword(), request.getFirstName(),

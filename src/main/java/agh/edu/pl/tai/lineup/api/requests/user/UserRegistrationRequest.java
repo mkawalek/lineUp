@@ -6,7 +6,7 @@ import agh.edu.pl.tai.lineup.domain.valueobject.Technology;
 
 import java.util.Set;
 
-public class UserCreationRequest {
+public class UserRegistrationRequest {
 
     private String email;
     private String password;
@@ -16,7 +16,17 @@ public class UserCreationRequest {
     private Department department;
     private FieldOfStudy fieldOfStudy;
 
-    public UserCreationRequest() {}
+    public UserRegistrationRequest() {}
+
+    public UserRegistrationRequest(String email, String password, String firstName, String lastName, Set<Technology> technologies, Department department, FieldOfStudy fieldOfStudy) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.technologies = technologies;
+        this.department = department;
+        this.fieldOfStudy = fieldOfStudy;
+    }
 
     public String getEmail() {
         return email;

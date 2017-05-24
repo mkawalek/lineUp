@@ -44,7 +44,7 @@ public class User {
                 .validateAndThrow();
 
         new Validator()
-                .on(!email.isEmpty(), "user.name", "empty")
+                .on(!email.isEmpty(), "user.email", "empty")
                 .on(!password.isEmpty(), "user.password", "empty")
                 .on(!firstName.isEmpty(), "user.firstName", "empty")
                 .on(!lastName.isEmpty(), "user.lastName", "empty")

@@ -15,10 +15,8 @@ import agh.edu.pl.tai.lineup.infrastructure.RandomIdGenerator;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceForbiddenException;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +37,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects", method = POST)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public CompletableFuture<IdResponse> createProject(@RequestBody ProjectEntityRequest request, @LoggedUser AuthenticatedUser user) {
         Project project = new Project(ProjectId.of(RandomIdGenerator.next()), request.getName(), request.getDescription(),
                 request.getVersionControlUrl(), user.getUserId(), ApiDomainConverter.toProjectTechnologies(request.getProjectTechnologies()));
