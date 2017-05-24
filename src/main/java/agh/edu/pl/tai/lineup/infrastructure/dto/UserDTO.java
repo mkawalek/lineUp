@@ -1,14 +1,12 @@
 package agh.edu.pl.tai.lineup.infrastructure.dto;
 
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
+import org.springframework.data.annotation.Id;
 
 import java.util.Set;
 
-@Table
 public class UserDTO {
 
-    @PrimaryKey
+    @Id
     private String userId;
     private String email;
     private String password;

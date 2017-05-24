@@ -1,13 +1,11 @@
 package agh.edu.pl.tai.lineup.infrastructure.dto;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.cassandra.mapping.Table;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
-@Table
 public class ProjectDTO {
 
     @Id

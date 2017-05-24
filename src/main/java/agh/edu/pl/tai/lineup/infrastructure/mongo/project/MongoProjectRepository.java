@@ -1,4 +1,4 @@
-package agh.edu.pl.tai.lineup.infrastructure.mongo;
+package agh.edu.pl.tai.lineup.infrastructure.mongo.project;
 
 import agh.edu.pl.tai.lineup.domain.project.ProjectRepository;
 import agh.edu.pl.tai.lineup.domain.project.aggregate.Project;

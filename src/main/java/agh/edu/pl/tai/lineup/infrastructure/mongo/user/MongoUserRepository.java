@@ -1,4 +1,4 @@
-package agh.edu.pl.tai.lineup.infrastructure.cassandra.user;
+package agh.edu.pl.tai.lineup.infrastructure.mongo.user;
 
 import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.aggregate.User;
@@ -13,10 +13,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Repository
-public class CassandraUserRepository implements UserRepository {
+public class MongoUserRepository implements UserRepository {
 
     @Autowired
-    private CassandraCRUDUserRepository userRepository;
+    private MongoCRUDUserRepository userRepository;
 
 
     @Override

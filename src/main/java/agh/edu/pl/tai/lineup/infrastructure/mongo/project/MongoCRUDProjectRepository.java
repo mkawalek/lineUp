@@ -1,4 +1,4 @@
-package agh.edu.pl.tai.lineup.infrastructure.mongo;
+package agh.edu.pl.tai.lineup.infrastructure.mongo.project;
 
 import agh.edu.pl.tai.lineup.infrastructure.dto.ProjectDTO;
 import org.springframework.data.mongodb.repository.MongoRepository;
