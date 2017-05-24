@@ -23,7 +23,7 @@ public class MongoUserRepository implements UserRepository {
     public CompletableFuture<Optional<User>> load(UserId id) {
         return
                 userRepository
-                        .findByUserId(id.getValue())
+                        .findById(id.getValue())
                         .thenApplyAsync(Optional::ofNullable)
                         .thenApplyAsync(user -> user.map((DTODomainConverter::fromUserDTO)));
     }

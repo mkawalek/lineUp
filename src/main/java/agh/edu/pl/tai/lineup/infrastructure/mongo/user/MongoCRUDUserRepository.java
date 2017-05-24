@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 public interface MongoCRUDUserRepository extends MongoRepository<UserDTO, String> {
 
     @Async
-    CompletableFuture<UserDTO> findByUserId(String userId);
+    CompletableFuture<UserDTO> findById(String userId);
 
     @Async
     CompletableFuture<List<UserDTO>> findByEmail(String email);
