@@ -2,7 +2,7 @@ package agh.edu.pl.tai.lineup.api.controllers;
 
 import agh.edu.pl.tai.lineup.api.requests.user.UserAuthenticationRequest;
 import agh.edu.pl.tai.lineup.api.requests.user.UserRegistrationRequest;
-import agh.edu.pl.tai.lineup.api.responses.user.RegistrationResponse;
+import agh.edu.pl.tai.lineup.api.responses.user.UserTokenResponse;
 import agh.edu.pl.tai.lineup.domain.user.TokenAuthenticator;
 import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.aggregate.User;
@@ -29,17 +29,17 @@ public class UserController {
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public CompletableFuture<RegistrationResponse> registerUser(@RequestBody UserRegistrationRequest request) {
+    public CompletableFuture<UserTokenResponse> registerUser(@RequestBody UserRegistrationRequest request) {
         return userRepository.findByEmail(request.getEmail()).thenApplyAsync(users -> {
             if (users.isEmpty()) {
                 return new User(UserId.of(RandomIdGenerator.next()), request.getEmail(), request.getPassword(), request.getFirstName(),
                         request.getLastName(), request.getTechnologies(), request.getDepartment(), request.getFieldOfStudy());
             } else throw new ValidationException("email_already_in_use");
-        }).thenCompose(user -> userRepository.save(user).thenApply(userId -> new RegistrationResponse(userId.getValue(), tokenAuthenticator.provideToken(userId))));
+        }).thenCompose(user -> userRepository.save(user).thenApply(userId -> new UserTokenResponse(userId.getValue(), tokenAuthenticator.provideToken(userId))));
     }
 
     @RequestMapping(value = "/users/auth", method = RequestMethod.POST)
-    public CompletableFuture<RegistrationResponse> authenticateUser(@RequestBody UserAuthenticationRequest request) {
+    public CompletableFuture<UserTokenResponse> authenticateUser(@RequestBody UserAuthenticationRequest request) {
         // TODO check if request.email does not contain any JS code ... hole security that can crash our database :(
         return userRepository.findByEmail(request.getEmail()).thenApplyAsync(users -> {
             if (!users.isEmpty()) {
@@ -47,7 +47,7 @@ public class UserController {
                         .stream()
                         .filter(user -> user.getEmail().equals(request.getEmail()))
                         .findFirst()
-                        .map(user -> new RegistrationResponse(user.getUserId().getValue(), tokenAuthenticator.provideToken(user.getUserId())))
+                        .map(user -> new UserTokenResponse(user.getUserId().getValue(), tokenAuthenticator.provideToken(user.getUserId())))
                         .orElseThrow(() -> new ValidationException("invalid_credentials"));
             } else throw new ValidationException("invalid_credentials");
         });

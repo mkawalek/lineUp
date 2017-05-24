@@ -65,6 +65,14 @@ public class ProjectController {
                 project -> project.editProject(request.getName(), request.getDescription(), request.getVersionControlUrl(), ApiDomainConverter.toProjectTechnologies(request.getProjectTechnologies())));
     }
 
+    @RequestMapping(value = "/projects/{projectId}", method = GET)
+    public CompletableFuture<ProjectResponse> getProject(@RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+        return projectRepository
+                .load(ProjectId.of(projectId))
+                .thenApplyAsync(projectOpt -> projectOpt.orElseThrow(ResourceNotFoundException::new))
+                .thenApplyAsync(ApiDomainConverter::toProjectResponse);
+    }
+
     @RequestMapping(value = "/projects/{projectId}/activate", method = PUT)
     public CompletableFuture<IdResponse> activateProject(@RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return loadMapAndSaveProject(

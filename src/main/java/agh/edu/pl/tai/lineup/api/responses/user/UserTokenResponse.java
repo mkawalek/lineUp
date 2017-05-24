@@ -1,11 +1,11 @@
 package agh.edu.pl.tai.lineup.api.responses.user;
 
-public class RegistrationResponse {
+public class UserTokenResponse {
 
     private String id;
     private String token;
 
-    public RegistrationResponse(String id, String token) {
+    public UserTokenResponse(String id, String token) {
         this.id = id;
         this.token = token;
     }
