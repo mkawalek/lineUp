@@ -12,7 +12,7 @@ class MongoConfig extends AbstractMongoConfiguration {
 
     @Override
     public Mongo mongo() throws Exception {
-        return new MongoClient("ds151141.mlab.com:51141/lineupdb");
+        return new MongoClient("137.74.166.3", 27017);
     }
 
     @Override
