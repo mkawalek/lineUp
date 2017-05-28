@@ -3,7 +3,9 @@ package agh.edu.pl.tai.lineup.infrastructure.mongo.project;
 import agh.edu.pl.tai.lineup.domain.project.ProjectRepository;
 import agh.edu.pl.tai.lineup.domain.project.aggregate.Project;
 import agh.edu.pl.tai.lineup.domain.project.valueobject.ProjectId;
+import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 import agh.edu.pl.tai.lineup.infrastructure.DTODomainConverter;
+import agh.edu.pl.tai.lineup.infrastructure.dto.ProjectDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
 
 @Repository
 public class MongoProjectRepository implements ProjectRepository {
@@ -29,11 +33,34 @@ public class MongoProjectRepository implements ProjectRepository {
 
     @Override
     public CompletableFuture<ProjectId> save(Project project) {
-        return CompletableFuture.supplyAsync(() -> projectRepository.save(DTODomainConverter.toProjectDTO(project))).thenApplyAsync(p -> ProjectId.of(p.getId()));
+        return CompletableFuture
+                .supplyAsync(() -> projectRepository.save(DTODomainConverter.toProjectDTO(project)))
+                .thenApplyAsync(ProjectDTO::getId)
+                .thenApplyAsync(ProjectId::of);
     }
 
     @Override
     public CompletableFuture<List<Project>> findAll() {
-        return CompletableFuture.supplyAsync(() -> projectRepository.findAll().stream().map(DTODomainConverter::fromProjectDTO).collect(Collectors.toList()));
+        return CompletableFuture
+                .supplyAsync(() -> projectRepository.findAll())
+                .thenApplyAsync(this::convert);
+    }
+
+    @Override
+    public CompletableFuture<List<Project>> findByOwner(UserId owner) {
+        return projectRepository
+                .findByOnwer(owner.getValue())
+                .thenApplyAsync(this::convert);
+    }
+
+    @Override
+    public CompletableFuture<List<Project>> findCollaboratedProjects(UserId userId) {
+        return projectRepository
+                .findCollaboratingProjects(userId.getValue())
+                .thenApplyAsync(this::convert);
+    }
+
+    private List<Project> convert(List<ProjectDTO> projectDTOS) {
+        return mapCol(projectDTOS, DTODomainConverter::fromProjectDTO, Collectors.toList());
     }
 }

@@ -1,19 +1,28 @@
 package agh.edu.pl.tai.lineup.api.controllers;
 
+import agh.edu.pl.tai.lineup.api.ApiDomainConverter;
 import agh.edu.pl.tai.lineup.api.requests.user.UserAuthenticationRequest;
 import agh.edu.pl.tai.lineup.api.requests.user.UserRegistrationRequest;
+import agh.edu.pl.tai.lineup.api.responses.user.UserDetailsResponse;
 import agh.edu.pl.tai.lineup.api.responses.user.UserTokenResponse;
 import agh.edu.pl.tai.lineup.domain.user.TokenAuthenticator;
 import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.aggregate.User;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 import agh.edu.pl.tai.lineup.infrastructure.RandomIdGenerator;
+import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceNotFoundException;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 public class UserController {
@@ -27,7 +36,7 @@ public class UserController {
         this.tokenAuthenticator = tokenAuthenticator;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/users", method = POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     public CompletableFuture<UserTokenResponse> registerUser(@RequestBody UserRegistrationRequest request) {
         return userRepository.findByEmail(request.getEmail()).thenApplyAsync(users -> {
@@ -38,7 +47,7 @@ public class UserController {
         }).thenCompose(user -> userRepository.save(user).thenApply(userId -> new UserTokenResponse(userId.getValue(), tokenAuthenticator.provideToken(userId))));
     }
 
-    @RequestMapping(value = "/users/auth", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/auth", method = POST)
     public CompletableFuture<UserTokenResponse> authenticateUser(@RequestBody UserAuthenticationRequest request) {
         // TODO check if request.email does not contain any JS code ... hole security that can crash our database :(
         return userRepository.findByEmail(request.getEmail()).thenApplyAsync(users -> {
@@ -51,6 +60,21 @@ public class UserController {
                         .orElseThrow(() -> new ValidationException("invalid_credentials"));
             } else throw new ValidationException("invalid_credentials");
         });
+    }
+
+    @RequestMapping(value = "/users", method = GET)
+    public CompletableFuture<List<UserDetailsResponse>> getUsers() {
+        return userRepository
+                .findAll()
+                .thenApplyAsync(users -> mapCol(users, ApiDomainConverter::toUserResponse, Collectors.toList() ));
+    }
+
+    @RequestMapping(value = "/users/{userId}", method = GET)
+    public CompletableFuture<UserDetailsResponse> getUserDetails(@RequestParam("userId") String userId) {
+        return userRepository
+                .load(UserId.of(userId))
+                .thenApplyAsync(userOpt -> userOpt.orElseThrow(ResourceNotFoundException::new))
+                .thenApplyAsync(ApiDomainConverter::toUserResponse);
     }
 
 }

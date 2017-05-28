@@ -4,6 +4,7 @@ import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.aggregate.User;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 import agh.edu.pl.tai.lineup.infrastructure.DTODomainConverter;
+import agh.edu.pl.tai.lineup.infrastructure.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
 
 @Repository
 public class MongoUserRepository implements UserRepository {
@@ -35,6 +38,15 @@ public class MongoUserRepository implements UserRepository {
 
     @Override
     public CompletableFuture<List<User>> findByEmail(String email) {
-        return userRepository.findByEmail(email).thenApplyAsync(users -> users.stream().map(DTODomainConverter::fromUserDTO).collect(Collectors.toList()));
+        return userRepository.findByEmail(email).thenApplyAsync(this::convert);
+    }
+
+    @Override
+    public CompletableFuture<List<User>> findAll() {
+        return CompletableFuture.supplyAsync(() -> userRepository.findAll()).thenApplyAsync(this::convert);
+    }
+
+    private List<User> convert(List<UserDTO> userDTOS) {
+        return mapCol(userDTOS, DTODomainConverter::fromUserDTO, Collectors.toList());
     }
 }

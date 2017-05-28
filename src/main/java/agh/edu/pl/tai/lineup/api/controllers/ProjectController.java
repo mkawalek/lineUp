@@ -24,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
@@ -51,10 +52,7 @@ public class ProjectController {
     public CompletableFuture<List<ProjectResponse>> getAllProjects() {
         return projectRepository
                 .findAll()
-                .thenApplyAsync(projects -> projects
-                        .stream()
-                        .map(ApiDomainConverter::toProjectResponse)
-                        .collect(Collectors.toList()));
+                .thenApplyAsync(projects -> mapCol(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
 
     @RequestMapping(value = "/projects/{projectId}", method = PUT)
@@ -116,6 +114,20 @@ public class ProjectController {
                 performer.getUserId(),
                 Project::setAsInactive
         );
+    }
+
+    @RequestMapping(value = "/projects/collaborated", method = GET)
+    public CompletableFuture<List<ProjectResponse>> getCollaboratedProjects(@LoggedUser AuthenticatedUser performer) {
+        return projectRepository
+                .findCollaboratedProjects(performer.getUserId())
+                .thenApplyAsync(projects -> mapCol(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
+    }
+
+    @RequestMapping(value = "/projects/me", method = GET)
+    public CompletableFuture<List<ProjectResponse>> getProjectsCreatedByMe(@LoggedUser AuthenticatedUser performer) {
+        return projectRepository
+                .findByOwner(performer.getUserId())
+                .thenApplyAsync(projects -> mapCol(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
 
 

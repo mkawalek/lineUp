@@ -1,8 +1,10 @@
 package agh.edu.pl.tai.lineup.api;
 
 import agh.edu.pl.tai.lineup.api.responses.project.ProjectResponse;
+import agh.edu.pl.tai.lineup.api.responses.user.UserDetailsResponse;
 import agh.edu.pl.tai.lineup.domain.project.aggregate.Project;
 import agh.edu.pl.tai.lineup.domain.project.entity.ProjectTechnologies;
+import agh.edu.pl.tai.lineup.domain.user.aggregate.User;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 import agh.edu.pl.tai.lineup.domain.valueobject.Technology;
 
@@ -32,6 +34,18 @@ public class ApiDomainConverter {
                 project.getOwner().getValue(),
                 project.getCreatedAt(),
                 project.getEnded()
+        );
+    }
+
+    public static UserDetailsResponse toUserResponse(User user) {
+        return new UserDetailsResponse(
+            user.getUserId().getValue(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getTechnologies().stream().map(Enum::name).collect(Collectors.toSet()),
+                user.getDepartment().name(),
+                user.getFieldOfStudy().name()
         );
     }
 
