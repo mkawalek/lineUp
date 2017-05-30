@@ -1,5 +1,7 @@
 package agh.edu.pl.tai.lineup.infrastructure;
 
+import agh.edu.pl.tai.lineup.domain.joins.aggregate.Join;
+import agh.edu.pl.tai.lineup.domain.joins.valueobject.JoinId;
 import agh.edu.pl.tai.lineup.domain.project.aggregate.Project;
 import agh.edu.pl.tai.lineup.domain.project.entity.ProjectParticipants;
 import agh.edu.pl.tai.lineup.domain.project.entity.ProjectTechnologies;
@@ -10,6 +12,7 @@ import agh.edu.pl.tai.lineup.domain.user.valueobject.Department;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.FieldOfStudy;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 import agh.edu.pl.tai.lineup.domain.valueobject.Technology;
+import agh.edu.pl.tai.lineup.infrastructure.dto.JoinDTO;
 import agh.edu.pl.tai.lineup.infrastructure.dto.ProjectDTO;
 import agh.edu.pl.tai.lineup.infrastructure.dto.UserDTO;
 
@@ -71,6 +74,28 @@ public class DTODomainConverter {
                 project.getCreatedAt(),
                 project.getEnded()
         );
+    }
+
+    public static JoinDTO toJoinDTO(Join join) {
+        return new JoinDTO(
+                join.getJoinId().getValue(),
+                join.getWho().getValue(),
+                join.getProjectId().getValue(),
+                join.getInvitation(),
+                join.getCreatedBy().getValue(),
+                join.getAccepted()
+        );
+    }
+
+    public static Join fromJoinDTO(JoinDTO joinDTO) {
+        return new Join(
+                JoinId.of(joinDTO.getJoinId()),
+                UserId.of(joinDTO.getWho()),
+                ProjectId.of(joinDTO.getProjectId()),
+                joinDTO.getInvitation(),
+                UserId.of(joinDTO.getCreatedBy())
+        );
+
     }
 
 }

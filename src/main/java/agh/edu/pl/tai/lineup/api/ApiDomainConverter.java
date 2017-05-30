@@ -1,7 +1,9 @@
 package agh.edu.pl.tai.lineup.api;
 
+import agh.edu.pl.tai.lineup.api.responses.join.JoinResponse;
 import agh.edu.pl.tai.lineup.api.responses.project.ProjectResponse;
 import agh.edu.pl.tai.lineup.api.responses.user.UserDetailsResponse;
+import agh.edu.pl.tai.lineup.domain.joins.aggregate.Join;
 import agh.edu.pl.tai.lineup.domain.project.aggregate.Project;
 import agh.edu.pl.tai.lineup.domain.project.entity.ProjectTechnologies;
 import agh.edu.pl.tai.lineup.domain.user.aggregate.User;
@@ -46,6 +48,15 @@ public class ApiDomainConverter {
                 user.getTechnologies().stream().map(Enum::name).collect(Collectors.toSet()),
                 user.getDepartment().name(),
                 user.getFieldOfStudy().name()
+        );
+    }
+
+    public static JoinResponse toJoinResponse(Join join) {
+        return new JoinResponse(
+                join.getJoinId().getValue(),
+                join.getWho().getValue(),
+                join.getProjectId().getValue(),
+                join.getCreatedBy().getValue()
         );
     }
 

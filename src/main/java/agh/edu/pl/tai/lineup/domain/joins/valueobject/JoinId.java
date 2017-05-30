@@ -1,12 +1,12 @@
-package agh.edu.pl.tai.lineup.domain.project.valueobject;
+package agh.edu.pl.tai.lineup.domain.joins.valueobject;
 
 import agh.edu.pl.tai.lineup.infrastructure.utils.Validator;
 
-public class ProjectId {
+public class JoinId {
 
     private String value;
 
-    public ProjectId(String value) {
+    public JoinId(String value) {
         this.value = value;
     }
 
@@ -14,18 +14,18 @@ public class ProjectId {
         return value;
     }
 
-    public static ProjectId of(String value) {
+    public static JoinId of(String value) {
         validate(value);
-        return new ProjectId(value);
+        return new JoinId(value);
     }
 
     private static void validate(String value) {
         new Validator()
-                .onNull(value, "project.id")
+                .onNull(value, "join.id")
                 .validateAndThrow();
 
         new Validator()
-                .on(!value.isEmpty(), "project.id", "empty")
+                .on(!value.isEmpty(), "join.id", "empty")
                 .validateAndThrow();
     }
 
@@ -34,9 +34,9 @@ public class ProjectId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProjectId projectId = (ProjectId) o;
+        JoinId joinId = (JoinId) o;
 
-        return value.equals(projectId.value);
+        return value.equals(joinId.value);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ProjectId {
 
     @Override
     public String toString() {
-        return "ProjectId{" +
+        return "JoinId{" +
                 "value='" + value + '\'' +
                 '}';
     }

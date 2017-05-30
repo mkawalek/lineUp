@@ -129,7 +129,7 @@ public class ProjectController {
                 .findByOwner(performer.getUserId())
                 .thenApplyAsync(projects -> mapCol(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
-
+    
 
     private Project projectExistAndPerformerIsAllowed(Optional<Project> projectOpt, UserId performer) {
         return projectOpt.map(p -> requestPerformerIsProjectOwner(p, performer)).orElseThrow(ResourceNotFoundException::new);

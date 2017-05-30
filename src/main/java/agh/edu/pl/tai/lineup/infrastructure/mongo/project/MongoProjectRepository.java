@@ -19,8 +19,12 @@ import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
 @Repository
 public class MongoProjectRepository implements ProjectRepository {
 
+    private final MongoCRUDProjectRepository projectRepository;
+
     @Autowired
-    private MongoCRUDProjectRepository projectRepository;
+    public MongoProjectRepository(MongoCRUDProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
 
 
     @Override
@@ -42,7 +46,7 @@ public class MongoProjectRepository implements ProjectRepository {
     @Override
     public CompletableFuture<List<Project>> findAll() {
         return CompletableFuture
-                .supplyAsync(() -> projectRepository.findAll())
+                .supplyAsync(projectRepository::findAll)
                 .thenApplyAsync(this::convert);
     }
 
