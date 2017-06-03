@@ -8,15 +8,15 @@ public class JoinDTO {
     private String id;
     private String who;
     private String projectId;
-    private Boolean isInvitation;
+    private Boolean invitation;
     private String createdBy;
     private Boolean accepted = false;
 
-    public JoinDTO(String id, String who, String projectId, Boolean isInvitation, String createdBy, Boolean accepted) {
+    public JoinDTO(String id, String who, String projectId, Boolean invitation, String createdBy, Boolean accepted) {
         this.id = id;
         this.who = who;
         this.projectId = projectId;
-        this.isInvitation = isInvitation;
+        this.invitation = invitation;
         this.createdBy = createdBy;
         this.accepted = accepted;
     }
@@ -46,11 +46,11 @@ public class JoinDTO {
     }
 
     public Boolean getInvitation() {
-        return isInvitation;
+        return invitation;
     }
 
     public void setInvitation(Boolean invitation) {
-        isInvitation = invitation;
+        this.invitation = invitation;
     }
 
     public String getCreatedBy() {
