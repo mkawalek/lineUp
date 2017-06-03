@@ -182,6 +182,7 @@ public class ProjectController {
     public CompletableFuture<ProjectHistoryResponse> getProjectsHistory(@LoggedUser AuthenticatedUser performer) {
         return projectRepository
                 .findAll()
+                .thenApplyAsync(projects -> filterCollection(projects, project -> project.getStatus().equals(ProjectStatus.CLOSED), Collectors.toList()))
                 .thenApplyAsync(projects -> {
                     Map<Boolean, List<Project>> result =  projects.stream().collect(Collectors.partitioningBy(project -> project.getOwner().equals(performer.getUserId())));
 
