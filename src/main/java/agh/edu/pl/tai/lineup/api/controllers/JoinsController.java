@@ -16,9 +16,9 @@ import agh.edu.pl.tai.lineup.infrastructure.RandomIdGenerator;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceForbiddenException;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class JoinsController {
 
     @RequestMapping(value = "/project/{projectId}/invite", method = POST)
     public CompletableFuture<IdResponse> inviteUser(
-            @RequestParam("projectId") String projectId, @RequestBody JoinRequest request, @LoggedUser AuthenticatedUser performer) {
+            @PathVariable("projectId") String projectId, @RequestBody JoinRequest request, @LoggedUser AuthenticatedUser performer) {
 
         return joinRepository
                 .save(new Join(JoinId.of(RandomIdGenerator.next()), UserId.of(request.getWho()), ProjectId.of(projectId), true, performer.getUserId()))
@@ -52,7 +52,7 @@ public class JoinsController {
 
     @RequestMapping(value = "/project/{projectId}/join", method = POST)
     public CompletableFuture<IdResponse> joinProject(
-            @RequestParam("projectId") String projectId, @RequestBody JoinRequest request, @LoggedUser AuthenticatedUser performer) {
+            @PathVariable("projectId") String projectId, @RequestBody JoinRequest request, @LoggedUser AuthenticatedUser performer) {
 
         return joinRepository
                 .save(new Join(JoinId.of(RandomIdGenerator.next()), UserId.of(request.getWho()), ProjectId.of(projectId), false, performer.getUserId()))
@@ -61,7 +61,7 @@ public class JoinsController {
     }
 
     @RequestMapping(value = "/joins/{joinId}/accept", method = PUT)
-    public CompletableFuture<IdResponse> acceptJoinRequest(@RequestParam("joinId") String joinId, @LoggedUser AuthenticatedUser performer) {
+    public CompletableFuture<IdResponse> acceptJoinRequest(@PathVariable("joinId") String joinId, @LoggedUser AuthenticatedUser performer) {
         return joinRepository
                 .load(JoinId.of(joinId))
                 .thenApplyAsync(join -> join.orElseThrow(ResourceNotFoundException::new))
@@ -89,7 +89,7 @@ public class JoinsController {
     }
 
     @RequestMapping(value = "/project/{projectId}/joins", method = GET)
-    public CompletableFuture<List<JoinResponse>> getAllJoinRequests(@RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+    public CompletableFuture<List<JoinResponse>> getAllJoinRequests(@PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return projectRepository
                 .load(ProjectId.of(projectId))
                 .thenApplyAsync(p -> p.orElseThrow(ResourceNotFoundException::new))

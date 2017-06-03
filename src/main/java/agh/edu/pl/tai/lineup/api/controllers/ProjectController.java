@@ -77,7 +77,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects/{projectId}", method = PUT)
-    public CompletableFuture<IdResponse> editProject(@RequestBody ProjectEntityRequest request, @RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser user) {
+    public CompletableFuture<IdResponse> editProject(@RequestBody ProjectEntityRequest request, @PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser user) {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 user.getUserId(),
@@ -85,7 +85,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects/{projectId}", method = GET)
-    public CompletableFuture<ProjectResponse> getProject(@RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+    public CompletableFuture<ProjectResponse> getProject(@PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return projectRepository
                 .load(ProjectId.of(projectId))
                 .thenApplyAsync(projectOpt -> projectOpt.orElseThrow(ResourceNotFoundException::new))
@@ -93,7 +93,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects/{projectId}/activate", method = PUT)
-    public CompletableFuture<IdResponse> activateProject(@RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+    public CompletableFuture<IdResponse> activateProject(@PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 performer.getUserId(),
@@ -102,7 +102,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects/{projectId}/end", method = PUT)
-    public CompletableFuture<IdResponse> endProject(@RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+    public CompletableFuture<IdResponse> endProject(@PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 performer.getUserId(),
@@ -111,7 +111,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects/{projectId}/participants", method = POST)
-    public CompletableFuture<IdResponse> addParticipantToProject(@RequestBody ParticipantEntityRequest request, @RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+    public CompletableFuture<IdResponse> addParticipantToProject(@RequestBody ParticipantEntityRequest request, @PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 performer.getUserId(),
@@ -120,7 +120,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects/{projectId}/participants", method = DELETE)
-    public CompletableFuture<IdResponse> removeParticipantFromProject(@RequestBody ParticipantEntityRequest request, @RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+    public CompletableFuture<IdResponse> removeParticipantFromProject(@RequestBody ParticipantEntityRequest request, @PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 performer.getUserId(),
@@ -129,7 +129,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects/{projectId}/inactivate", method = PUT)
-    public CompletableFuture<IdResponse> inactivateProject(@RequestParam("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+    public CompletableFuture<IdResponse> inactivateProject(@PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 performer.getUserId(),
