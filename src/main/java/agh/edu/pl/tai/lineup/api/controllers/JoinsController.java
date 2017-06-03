@@ -9,6 +9,7 @@ import agh.edu.pl.tai.lineup.api.security.LoggedUser;
 import agh.edu.pl.tai.lineup.domain.joins.JoinRepository;
 import agh.edu.pl.tai.lineup.domain.joins.aggregate.Join;
 import agh.edu.pl.tai.lineup.domain.joins.valueobject.JoinId;
+import agh.edu.pl.tai.lineup.domain.joins.valueobject.JoinStatus;
 import agh.edu.pl.tai.lineup.domain.project.ProjectRepository;
 import agh.edu.pl.tai.lineup.domain.project.valueobject.ProjectId;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.filterCollection;
 import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCollection;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -88,6 +90,29 @@ public class JoinsController {
                 .thenApplyAsync(IdResponse::new); // todo move all below code to some service
     }
 
+    @RequestMapping(value = "/joins/{joinId}/decline", method = PUT)
+    public CompletableFuture<IdResponse> declineJoinRequest(@PathVariable("joinId") String joinId, @LoggedUser AuthenticatedUser performer) {
+        return joinRepository
+                .load(JoinId.of(joinId))
+                .thenApplyAsync(join -> join.orElseThrow(ResourceNotFoundException::new))
+                .thenComposeAsync(join -> {
+                    if (!join.getCreatedBy().equals(performer.getUserId())) throw new ResourceForbiddenException();
+                    return projectRepository
+                            .load(join.getProjectId())
+                            .thenApplyAsync(p -> p.orElseThrow(ResourceNotFoundException::new))
+                            .thenApplyAsync(project -> {
+                                if (project.getOwner().equals(performer.getUserId()) && !join.getInvitation()) join.markAsDeclined();
+                                else if (!project.getOwner().equals(performer.getUserId()) && join.getInvitation()) join.markAsDeclined();
+                                else throw new ResourceForbiddenException();
+                                return project;
+                            })
+                            .thenApplyAsync(p -> join);
+                })
+                .thenComposeAsync(joinRepository::save)
+                .thenApplyAsync(JoinId::getValue)
+                .thenApplyAsync(IdResponse::new); // todo move all below code to some service
+    }
+
     @RequestMapping(value = "/projects/{projectId}/joins", method = GET)
     public CompletableFuture<List<JoinResponse>> getAllJoinRequests(@PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return projectRepository
@@ -98,6 +123,7 @@ public class JoinsController {
                     else return project;
                 })
                 .thenComposeAsync(p -> joinRepository.getJoinsForProject(p.getProjectId().getValue()))
+                .thenApplyAsync(users -> filterCollection(users, join -> !join.getStatus().equals(JoinStatus.DECLINED), Collectors.toList()))
                 .thenApplyAsync(joins -> mapCollection(joins, ApiDomainConverter::toJoinResponse, Collectors.toList()));
     }
 
@@ -105,6 +131,7 @@ public class JoinsController {
     public CompletableFuture<List<JoinResponse>> getAllUsersInvitations(@LoggedUser AuthenticatedUser performer) {
         return joinRepository
                 .getInvitationsByUser(performer.getUserId().getValue())
+                .thenApplyAsync(users -> filterCollection(users, join -> !join.getStatus().equals(JoinStatus.DECLINED), Collectors.toList()))
                 .thenApplyAsync(joins -> mapCollection(joins, ApiDomainConverter::toJoinResponse, Collectors.toList()));
     }
 
