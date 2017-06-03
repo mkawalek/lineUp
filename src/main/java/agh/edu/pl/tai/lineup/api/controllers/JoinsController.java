@@ -40,7 +40,7 @@ public class JoinsController {
         this.joinRepository = joinRepository;
     }
 
-    @RequestMapping(value = "/project/{projectId}/invite", method = POST)
+    @RequestMapping(value = "/projects/{projectId}/invite", method = POST)
     public CompletableFuture<IdResponse> inviteUser(
             @PathVariable("projectId") String projectId, @RequestBody JoinRequest request, @LoggedUser AuthenticatedUser performer) {
 
@@ -50,7 +50,7 @@ public class JoinsController {
                 .thenApplyAsync(IdResponse::new);
     }
 
-    @RequestMapping(value = "/project/{projectId}/join", method = POST)
+    @RequestMapping(value = "/projects/{projectId}/join", method = POST)
     public CompletableFuture<IdResponse> joinProject(
             @PathVariable("projectId") String projectId, @RequestBody JoinRequest request, @LoggedUser AuthenticatedUser performer) {
 
@@ -88,7 +88,7 @@ public class JoinsController {
                 .thenApplyAsync(IdResponse::new); // todo move all below code to some service
     }
 
-    @RequestMapping(value = "/project/{projectId}/joins", method = GET)
+    @RequestMapping(value = "/projects/{projectId}/joins", method = GET)
     public CompletableFuture<List<JoinResponse>> getAllJoinRequests(@PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return projectRepository
                 .load(ProjectId.of(projectId))
