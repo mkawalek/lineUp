@@ -53,7 +53,7 @@ public class MongoProjectRepository implements ProjectRepository {
     @Override
     public CompletableFuture<List<Project>> findByOwner(UserId owner) {
         return projectRepository
-                .findByOnwer(owner.getValue())
+                .findByOwner(owner.getValue())
                 .thenApplyAsync(this::convert);
     }
 
