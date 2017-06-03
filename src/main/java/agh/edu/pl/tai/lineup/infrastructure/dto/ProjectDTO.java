@@ -12,7 +12,7 @@ public class ProjectDTO {
     private final String id;
     private String title;
     private String description;
-    private Optional<String> versionControlUrl;
+    private String versionControlUrl;
     private Set<String> technologies;
     private Set<String> participants;
     private String projectStatus;
@@ -21,7 +21,7 @@ public class ProjectDTO {
     private Optional<LocalDateTime> ended;
 
 
-    public ProjectDTO(String id, String title, String description, Optional<String> versionControlUrl, Set<String> technologies, Set<String> participants, String projectStatus, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
+    public ProjectDTO(String id, String title, String description, String versionControlUrl, Set<String> technologies, Set<String> participants, String projectStatus, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -46,7 +46,7 @@ public class ProjectDTO {
         return description;
     }
 
-    public Optional<String> getVersionControlUrl() {
+    public String getVersionControlUrl() {
         return versionControlUrl;
     }
 

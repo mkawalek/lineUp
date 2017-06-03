@@ -16,7 +16,7 @@ public class Project {
     private ProjectId projectId;
     private String name;
     private String description;
-    private Optional<String> versionControlUrl;
+    private String versionControlUrl;
     private UserId owner;
     private ProjectTechnologies projectTechnologies;
     private ProjectParticipants projectParticipants;
@@ -24,7 +24,7 @@ public class Project {
     private LocalDateTime createdAt = LocalDateTime.now();
     private Optional<LocalDateTime> ended = Optional.empty();
 
-    public Project(ProjectId projectId, String name, String description, Optional<String> versionControlUrl, UserId owner, ProjectTechnologies projectTechnologies) {
+    public Project(ProjectId projectId, String name, String description, String versionControlUrl, UserId owner, ProjectTechnologies projectTechnologies) {
         validate(name, description, versionControlUrl, projectTechnologies);
         this.projectId = projectId;
         this.name = name;
@@ -35,7 +35,7 @@ public class Project {
         this.projectParticipants = new ProjectParticipants(Sets.newHashSet(owner));
     }
 
-    public Project(ProjectId projectId, String name, String description, Optional<String> versionControlUrl, UserId owner, ProjectTechnologies projectTechnologies, ProjectParticipants projectParticipants, ProjectStatus projectStatus, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
+    public Project(ProjectId projectId, String name, String description, String versionControlUrl, UserId owner, ProjectTechnologies projectTechnologies, ProjectParticipants projectParticipants, ProjectStatus projectStatus, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
         this.projectId = projectId;
         this.name = name;
         this.description = description;
@@ -48,7 +48,7 @@ public class Project {
         this.ended = ended;
     }
 
-    private void validate(String name, String description, Optional<String> versionControlUrl, ProjectTechnologies projectTechnologies) {
+    private void validate(String name, String description, String versionControlUrl, ProjectTechnologies projectTechnologies) {
         new Validator()
                 .onNull(name, "project.name")
                 .onNull(description, "project.description")
@@ -58,11 +58,10 @@ public class Project {
         new Validator()
                 .on(!name.isEmpty(), "project.name", "empty")
                 .on(!description.isEmpty(), "project.description", "empty")
-                .on(versionControlUrl.map(url -> !url.isEmpty()).orElse(true), "project.version.control.url", "empty")
                 .on(!projectTechnologies.getTechnologies().isEmpty(), "project.version.control.url", "empty");
     }
 
-    public void editProject(String name, String description, Optional<String> versionControlUrl, ProjectTechnologies projectTechnologies) {
+    public void editProject(String name, String description, String versionControlUrl, ProjectTechnologies projectTechnologies) {
         validate(name, description, versionControlUrl, projectTechnologies);
         this.name = name;
         this.description = description;
@@ -105,7 +104,7 @@ public class Project {
         return description;
     }
 
-    public Optional<String> getVersionControlUrl() {
+    public String getVersionControlUrl() {
         return versionControlUrl;
     }
 

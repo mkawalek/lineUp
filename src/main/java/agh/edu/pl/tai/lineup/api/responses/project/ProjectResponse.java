@@ -9,7 +9,7 @@ public class ProjectResponse {
     private String projectId;
     private String name;
     private String description;
-    private Optional<String> versionControlUrl;
+    private String versionControlUrl;
     private Set<String> projectTechnologies;
     private Set<String> projectParticipants;
     private String projectStatus;
@@ -17,7 +17,7 @@ public class ProjectResponse {
     private LocalDateTime createdAt;
     private Optional<LocalDateTime> ended;
 
-    public ProjectResponse(String projectId, String name, String description, Optional<String> versionControlUrl, Set<String> projectTechnologies, Set<String> projectParticipants, String projectStatus, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
+    public ProjectResponse(String projectId, String name, String description, String versionControlUrl, Set<String> projectTechnologies, Set<String> projectParticipants, String projectStatus, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
         this.projectId = projectId;
         this.name = name;
         this.description = description;
@@ -42,7 +42,7 @@ public class ProjectResponse {
         return description;
     }
 
-    public Optional<String> getVersionControlUrl() {
+    public String getVersionControlUrl() {
         return versionControlUrl;
     }
 

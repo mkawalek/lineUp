@@ -1,13 +1,12 @@
 package agh.edu.pl.tai.lineup.api.requests.project;
 
-import java.util.Optional;
 import java.util.Set;
 
 public class ProjectEntityRequest {
 
     private String title;
     private String description;
-    private Optional<String> versionControlUrl;
+    private String versionControlUrl;
     private Set<String> technologies;
 
     public ProjectEntityRequest() {}
@@ -36,11 +35,11 @@ public class ProjectEntityRequest {
         this.technologies = technologies;
     }
 
-    public Optional<String> getVersionControlUrl() {
+    public String getVersionControlUrl() {
         return versionControlUrl;
     }
 
-    public void setVersionControlUrl(Optional<String> versionControlUrl) {
+    public void setVersionControlUrl(String versionControlUrl) {
         this.versionControlUrl = versionControlUrl;
     }
 }
