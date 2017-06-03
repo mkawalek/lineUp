@@ -20,7 +20,7 @@ public class Project {
     private UserId owner;
     private ProjectTechnologies projectTechnologies;
     private ProjectParticipants projectParticipants;
-    private ProjectStatus projectStatus = ProjectStatus.INACTIVE;
+    private ProjectStatus status = ProjectStatus.INACTIVE;
     private LocalDateTime createdAt = LocalDateTime.now();
     private Optional<LocalDateTime> ended = Optional.empty();
 
@@ -35,7 +35,7 @@ public class Project {
         this.projectParticipants = new ProjectParticipants(Sets.newHashSet(owner));
     }
 
-    public Project(ProjectId projectId, String name, String description, String versionControlUrl, UserId owner, ProjectTechnologies projectTechnologies, ProjectParticipants projectParticipants, ProjectStatus projectStatus, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
+    public Project(ProjectId projectId, String name, String description, String versionControlUrl, UserId owner, ProjectTechnologies projectTechnologies, ProjectParticipants projectParticipants, ProjectStatus status, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
         this.projectId = projectId;
         this.name = name;
         this.description = description;
@@ -43,7 +43,7 @@ public class Project {
         this.owner = owner;
         this.projectTechnologies = projectTechnologies;
         this.projectParticipants = projectParticipants;
-        this.projectStatus = projectStatus;
+        this.status = status;
         this.createdAt = createdAt;
         this.ended = ended;
     }
@@ -72,16 +72,16 @@ public class Project {
 
     public void endProject() {
         this.ended = Optional.of(LocalDateTime.now());
-        this.projectStatus = ProjectStatus.INACTIVE;
+        this.status = ProjectStatus.INACTIVE;
     }
 
     public void setAsInactive() {
-        this.projectStatus = ProjectStatus.INACTIVE;
+        this.status = ProjectStatus.INACTIVE;
     }
 
     public void activate() {
         this.ended = Optional.empty(); // if we use endProject and then we would like to reactive'ate it, we should clear 'ended' field
-        this.projectStatus = ProjectStatus.ACTIVE;
+        this.status = ProjectStatus.ACTIVE;
     }
 
     public void addParticipant(UserId participant) {
@@ -120,8 +120,8 @@ public class Project {
         return projectParticipants;
     }
 
-    public ProjectStatus getProjectStatus() {
-        return projectStatus;
+    public ProjectStatus getStatus() {
+        return status;
     }
 
     public LocalDateTime getCreatedAt() {

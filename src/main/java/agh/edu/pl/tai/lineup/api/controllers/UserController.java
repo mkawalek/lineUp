@@ -40,7 +40,6 @@ public class UserController {
     @RequestMapping(value = "/users", method = POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     public CompletableFuture<UserTokenResponse> registerUser(@RequestBody UserRegistrationRequest request) {
-        System.out.println(request.getEmail());
         return userRepository.findByEmail(request.getEmail()).thenApplyAsync(userOpt -> {
             if (!userOpt.isPresent()) {
                 return new User(UserId.of(RandomIdGenerator.next()), request.getEmail(), PasswordHasher.encrypt(request.getPassword()), request.getFirstName(),

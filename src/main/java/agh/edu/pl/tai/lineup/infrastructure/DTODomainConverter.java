@@ -55,7 +55,7 @@ public class DTODomainConverter {
                 UserId.of(projectDTO.getOwner()),
                 new ProjectTechnologies(projectDTO.getTechnologies().stream().map(Technology::valueOf).collect(Collectors.toSet())),
                 new ProjectParticipants(projectDTO.getParticipants().stream().map(UserId::of).collect(Collectors.toSet())),
-                ProjectStatus.valueOf(projectDTO.getProjectStatus()),
+                ProjectStatus.valueOf(projectDTO.getStatus()),
                 projectDTO.getCreatedAt(),
                 projectDTO.getEnded()
         );
@@ -69,7 +69,7 @@ public class DTODomainConverter {
                 project.getVersionControlUrl(),
                 project.getProjectTechnologies().getTechnologies().stream().map(Enum::name).collect(Collectors.toSet()),
                 project.getProjectParticipants().getProjectParticipants().stream().map(UserId::getValue).collect(Collectors.toSet()),
-                project.getProjectStatus().name(),
+                project.getStatus().name(),
                 project.getOwner().getValue(),
                 project.getCreatedAt(),
                 project.getEnded()

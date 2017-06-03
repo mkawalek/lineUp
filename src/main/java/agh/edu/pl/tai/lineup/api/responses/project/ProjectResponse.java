@@ -12,19 +12,19 @@ public class ProjectResponse {
     private String versionControlUrl;
     private Set<String> projectTechnologies;
     private Set<String> projectParticipants;
-    private String projectStatus;
+    private String status;
     private String owner;
     private LocalDateTime createdAt;
     private Optional<LocalDateTime> ended;
 
-    public ProjectResponse(String projectId, String name, String description, String versionControlUrl, Set<String> projectTechnologies, Set<String> projectParticipants, String projectStatus, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
+    public ProjectResponse(String projectId, String name, String description, String versionControlUrl, Set<String> projectTechnologies, Set<String> projectParticipants, String status, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
         this.projectId = projectId;
         this.name = name;
         this.description = description;
         this.versionControlUrl = versionControlUrl;
         this.projectTechnologies = projectTechnologies;
         this.projectParticipants = projectParticipants;
-        this.projectStatus = projectStatus;
+        this.status = status;
         this.owner = owner;
         this.createdAt = createdAt;
         this.ended = ended;
@@ -54,8 +54,8 @@ public class ProjectResponse {
         return projectParticipants;
     }
 
-    public String getProjectStatus() {
-        return projectStatus;
+    public String getStatus() {
+        return status;
     }
 
     public String getOwner() {

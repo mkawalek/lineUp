@@ -32,7 +32,7 @@ public class ApiDomainConverter {
                 project.getVersionControlUrl(),
                 project.getProjectTechnologies().getTechnologies().stream().map(Enum::name).collect(Collectors.toSet()),
                 project.getProjectParticipants().getProjectParticipants().stream().map(UserId::getValue).collect(Collectors.toSet()),
-                project.getProjectStatus().name(),
+                project.getStatus().name(),
                 project.getOwner().getValue(),
                 project.getCreatedAt(),
                 project.getEnded()
