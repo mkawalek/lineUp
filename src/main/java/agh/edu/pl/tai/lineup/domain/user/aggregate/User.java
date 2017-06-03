@@ -33,9 +33,22 @@ public class User {
     }
 
     private void validate(String email, String hashedPassword, String firstName, String lastName, Set<Technology> technologies, Department department, FieldOfStudy fieldOfStudy) {
+        validateOnEdit(firstName, lastName, technologies, fieldOfStudy, department);
+
         new Validator()
                 .onNull(email, "user.email")
                 .onNull(hashedPassword, "user.password")
+                .validateAndThrow();
+
+        new Validator()
+                .on(!email.isEmpty(), "user.email", "empty")
+                .on(!hashedPassword.isEmpty(), "user.password", "empty")
+                .on(email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"), "user.email", "invalid")
+                .validateAndThrow();
+    }
+
+    private void validateOnEdit(String firstName, String lastName, Set<Technology> technologies, FieldOfStudy fieldOfStudy, Department department) {
+        new Validator()
                 .onNull(firstName, "user.firstName")
                 .onNull(lastName, "user.lastName")
                 .onNull(technologies, "user.technologies")
@@ -44,12 +57,19 @@ public class User {
                 .validateAndThrow();
 
         new Validator()
-                .on(!email.isEmpty(), "user.email", "empty")
-                .on(!hashedPassword.isEmpty(), "user.password", "empty")
                 .on(!firstName.isEmpty(), "user.firstName", "empty")
                 .on(!lastName.isEmpty(), "user.lastName", "empty")
-                .on(email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"), "user.email", "invalid")
                 .validateAndThrow();
+    }
+
+    public void editUserDetails(String firstName, String lastName, Set<Technology> technologies, FieldOfStudy fieldOfStudy, Department department) {
+        validateOnEdit(firstName, lastName, technologies, fieldOfStudy, department);
+
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.technologies = technologies;
+        this.fieldOfStudy = fieldOfStudy;
+        this.department = department;
     }
 
     public UserId getUserId() {

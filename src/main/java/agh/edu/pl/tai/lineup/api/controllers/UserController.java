@@ -2,13 +2,20 @@ package agh.edu.pl.tai.lineup.api.controllers;
 
 import agh.edu.pl.tai.lineup.api.ApiDomainConverter;
 import agh.edu.pl.tai.lineup.api.requests.user.UserAuthenticationRequest;
+import agh.edu.pl.tai.lineup.api.requests.user.UserEditDetailsRequest;
 import agh.edu.pl.tai.lineup.api.requests.user.UserRegistrationRequest;
+import agh.edu.pl.tai.lineup.api.responses.IdResponse;
 import agh.edu.pl.tai.lineup.api.responses.user.UserDetailsResponse;
 import agh.edu.pl.tai.lineup.api.responses.user.UserTokenResponse;
+import agh.edu.pl.tai.lineup.api.security.AuthenticatedUser;
+import agh.edu.pl.tai.lineup.api.security.LoggedUser;
 import agh.edu.pl.tai.lineup.domain.user.TokenAuthenticator;
 import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.aggregate.User;
+import agh.edu.pl.tai.lineup.domain.user.valueobject.Department;
+import agh.edu.pl.tai.lineup.domain.user.valueobject.FieldOfStudy;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
+import agh.edu.pl.tai.lineup.domain.valueobject.Technology;
 import agh.edu.pl.tai.lineup.infrastructure.RandomIdGenerator;
 import agh.edu.pl.tai.lineup.infrastructure.utils.PasswordHasher;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceNotFoundException;
@@ -21,9 +28,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.filterCollection;
 import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCollection;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 public class UserController {
@@ -60,9 +67,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = GET)
-    public CompletableFuture<List<UserDetailsResponse>> getUsers() {
+    public CompletableFuture<List<UserDetailsResponse>> getUsers(@LoggedUser AuthenticatedUser performer) {
         return userRepository
                 .findAll()
+                .thenApplyAsync(users -> filterCollection(users, user -> !user.getUserId().equals(performer.getUserId()), Collectors.toList()))
                 .thenApplyAsync(users -> mapCollection(users, ApiDomainConverter::toUserResponse, Collectors.toList()));
     }
 
@@ -73,5 +81,26 @@ public class UserController {
                 .thenApplyAsync(userOpt -> userOpt.orElseThrow(ResourceNotFoundException::new))
                 .thenApplyAsync(ApiDomainConverter::toUserResponse);
     }
+
+    @RequestMapping(value = "/users/{userId}", method = PUT)
+    public CompletableFuture<IdResponse> editUserDetails(@PathVariable("userId") String userId, @LoggedUser AuthenticatedUser performer, @RequestBody UserEditDetailsRequest request) {
+        return userRepository
+                .load(UserId.of(userId))
+                .thenApplyAsync(user -> user.orElseThrow(ResourceNotFoundException::new))
+                .thenApplyAsync(user -> {
+                    user
+                            .editUserDetails(
+                                    request.getFirstName(),
+                                    request.getLastName(),
+                                    mapCollection(request.getTechnologies(), Technology::valueOf, Collectors.toSet()),
+                                    FieldOfStudy.valueOf(request.getFieldOfStudy()),
+                                    Department.valueOf(request.getDepartment()));
+                    return user;
+                })
+                .thenComposeAsync(userRepository::save)
+                .thenApplyAsync(UserId::getValue)
+                .thenApplyAsync(IdResponse::new);
+    }
+
 
 }
