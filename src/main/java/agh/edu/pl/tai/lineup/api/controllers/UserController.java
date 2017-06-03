@@ -102,5 +102,4 @@ public class UserController {
                 .thenApplyAsync(IdResponse::new);
     }
 
-
 }
