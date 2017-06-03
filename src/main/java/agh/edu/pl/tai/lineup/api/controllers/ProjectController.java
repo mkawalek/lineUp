@@ -5,11 +5,14 @@ import agh.edu.pl.tai.lineup.api.requests.project.ParticipantEntityRequest;
 import agh.edu.pl.tai.lineup.api.requests.project.ProjectEntityRequest;
 import agh.edu.pl.tai.lineup.api.responses.IdResponse;
 import agh.edu.pl.tai.lineup.api.responses.project.ProjectResponse;
+import agh.edu.pl.tai.lineup.api.responses.user.UserDetailsResponse;
 import agh.edu.pl.tai.lineup.api.security.AuthenticatedUser;
 import agh.edu.pl.tai.lineup.api.security.LoggedUser;
 import agh.edu.pl.tai.lineup.domain.project.ProjectRepository;
 import agh.edu.pl.tai.lineup.domain.project.aggregate.Project;
+import agh.edu.pl.tai.lineup.domain.project.entity.ProjectParticipants;
 import agh.edu.pl.tai.lineup.domain.project.valueobject.ProjectId;
+import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.Department;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.FieldOfStudy;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
@@ -34,10 +37,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class ProjectController {
 
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ProjectController(ProjectRepository projectRepository) {
+    public ProjectController(ProjectRepository projectRepository, UserRepository userRepository) {
         this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
     }
 
     @RequestMapping(value = "/projects", method = POST)
@@ -119,6 +124,26 @@ public class ProjectController {
         );
     }
 
+    @RequestMapping(value = "/projects/{projectId}/participants", method = GET)
+    public CompletableFuture<List<UserDetailsResponse>> getParticipantsForProject(@PathVariable("projectId") String projectId) {
+        return projectRepository
+                .load(ProjectId.of(projectId))
+                .thenApplyAsync(projectOpt -> projectOpt.orElseThrow(ResourceNotFoundException::new))
+                .thenApplyAsync(Project::getParticipants)
+                .thenApplyAsync(ProjectParticipants::getProjectParticipants)
+                .thenApplyAsync(users ->
+                                users
+                                        .stream()
+                                        .map(userId -> userRepository
+                                                .load(UserId.of(userId.getValue()))
+                                                .thenApplyAsync(user -> user.orElseThrow(ResourceNotFoundException::new))
+                                                .join()
+                                        )
+                                        .collect(Collectors.toList())
+                )
+                .thenApplyAsync(users -> users.stream().map(ApiDomainConverter::toUserResponse).collect(Collectors.toList()));
+    }
+
     @RequestMapping(value = "/projects/{projectId}/participants", method = DELETE)
     public CompletableFuture<IdResponse> removeParticipantFromProject(@RequestBody ParticipantEntityRequest request, @PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
         return loadMapAndSaveProject(
@@ -173,5 +198,7 @@ public class ProjectController {
                 .thenApplyAsync(ProjectId::getValue)
                 .thenApplyAsync(IdResponse::new);
     }
+
+
 
 }
