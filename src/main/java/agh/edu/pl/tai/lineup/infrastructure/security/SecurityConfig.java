@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .mvcMatchers(OPTIONS, "/*")
+                .mvcMatchers(OPTIONS, "/**")
                 .mvcMatchers(POST, "/users").and().ignoring()
                 .mvcMatchers(POST, "/users/auth").and().ignoring()
                 .mvcMatchers(GET, "/departments").and().ignoring()
