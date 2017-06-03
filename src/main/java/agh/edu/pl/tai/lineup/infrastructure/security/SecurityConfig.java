@@ -30,8 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers(POST, "/users").permitAll()
-                .antMatchers(POST, "/users/auth").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenAuthenticator), BasicAuthenticationFilter.class)
