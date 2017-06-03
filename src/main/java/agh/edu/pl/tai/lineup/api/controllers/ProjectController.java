@@ -169,7 +169,7 @@ public class ProjectController {
                 .thenApplyAsync(projects -> mapCol(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
 
-    @RequestMapping(value = "/me/projects", method = GET)
+    @RequestMapping(value = "/projects/me", method = GET)
     public CompletableFuture<List<ProjectResponse>> getProjectsCreatedByMe(@LoggedUser AuthenticatedUser performer) {
         return projectRepository
                 .findByOwner(performer.getUserId())
