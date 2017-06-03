@@ -3,6 +3,7 @@ package agh.edu.pl.tai.lineup.api.controllers;
 import agh.edu.pl.tai.lineup.api.ApiDomainConverter;
 import agh.edu.pl.tai.lineup.api.requests.project.ProjectEntityRequest;
 import agh.edu.pl.tai.lineup.api.responses.IdResponse;
+import agh.edu.pl.tai.lineup.api.responses.project.ProjectHistoryResponse;
 import agh.edu.pl.tai.lineup.api.responses.project.ProjectResponse;
 import agh.edu.pl.tai.lineup.api.responses.user.UserDetailsResponse;
 import agh.edu.pl.tai.lineup.api.security.AuthenticatedUser;
@@ -24,9 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -177,6 +176,20 @@ public class ProjectController {
                 .findByOwner(performer.getUserId())
                 .thenApplyAsync(projects -> filterCollection(projects, project -> !project.getStatus().equals(ProjectStatus.CLOSED), Collectors.toList()))
                 .thenApplyAsync(projects -> mapCollection(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
+    }
+
+    @RequestMapping(value = "/projects/history", method = GET)
+    public CompletableFuture<ProjectHistoryResponse> getProjectsHistory(@LoggedUser AuthenticatedUser performer) {
+        return projectRepository
+                .findAll()
+                .thenApplyAsync(projects -> {
+                    Map<Boolean, List<Project>> result =  projects.stream().collect(Collectors.partitioningBy(project -> project.getOwner().equals(performer.getUserId())));
+
+                    return new ProjectHistoryResponse(
+                            mapCollection(result.getOrDefault(true, Collections.emptyList()), ApiDomainConverter::toProjectResponse, Collectors.toList()),
+                            mapCollection(result.getOrDefault(false, Collections.emptyList()), ApiDomainConverter::toProjectResponse, Collectors.toList())
+                    );
+                });
     }
     
 
