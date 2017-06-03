@@ -117,7 +117,7 @@ public class JoinsController {
                     else return project;
                 })
                 .thenComposeAsync(p -> joinRepository.getJoinsForProject(p.getProjectId().getValue()))
-                .thenApplyAsync(users -> filterCollection(users, join -> !join.getStatus().equals(JoinStatus.DECLINED), Collectors.toList()))
+                .thenApplyAsync(users -> filterCollection(users, join -> join.getStatus().equals(JoinStatus.PENDING), Collectors.toList()))
                 .thenApplyAsync(joins -> mapCollection(joins, ApiDomainConverter::toJoinResponse, Collectors.toList()));
     }
 
@@ -125,7 +125,7 @@ public class JoinsController {
     public CompletableFuture<List<JoinResponse>> getAllUsersInvitations(@LoggedUser AuthenticatedUser performer) {
         return joinRepository
                 .getInvitationsByUser(performer.getUserId().getValue())
-                .thenApplyAsync(users -> filterCollection(users, join -> !join.getStatus().equals(JoinStatus.DECLINED), Collectors.toList()))
+                .thenApplyAsync(users -> filterCollection(users, join -> join.getStatus().equals(JoinStatus.PENDING), Collectors.toList()))
                 .thenApplyAsync(joins -> mapCollection(joins, ApiDomainConverter::toJoinResponse, Collectors.toList()));
     }
 
