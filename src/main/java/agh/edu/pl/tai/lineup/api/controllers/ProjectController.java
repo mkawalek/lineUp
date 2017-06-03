@@ -93,7 +93,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects/{projectId}", method = GET)
-    public CompletableFuture<ProjectResponse> getProject(@PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+    public CompletableFuture<ProjectResponse> getProject(@PathVariable("projectId") String projectId) {
         return projectRepository
                 .load(ProjectId.of(projectId))
                 .thenApplyAsync(projectOpt -> projectOpt.orElseThrow(ResourceNotFoundException::new))
