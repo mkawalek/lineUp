@@ -18,6 +18,7 @@ import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 import agh.edu.pl.tai.lineup.domain.valueobject.Technology;
 import agh.edu.pl.tai.lineup.infrastructure.RandomIdGenerator;
 import agh.edu.pl.tai.lineup.infrastructure.utils.PasswordHasher;
+import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceForbiddenException;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceNotFoundException;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +60,11 @@ public class UserController {
     public CompletableFuture<UserTokenResponse> authenticateUser(@RequestBody UserAuthenticationRequest request) {
         // TODO check if request.email does not contain any JS code ... hole security that can crash our database :(
         return userRepository.findByEmail(request.getEmail()).thenApplyAsync(userOpt ->
-            userOpt
-                    .filter(user -> user.getEmail().equals(request.getEmail()))
-                    .filter(user -> user.getHashedPassword().equals(PasswordHasher.encrypt(request.getPassword())))
-                    .map(user -> new UserTokenResponse(user.getUserId().getValue(), tokenAuthenticator.provideToken(user.getUserId())))
-                    .orElseThrow(() -> new ValidationException("invalid_credentials")));
+                userOpt
+                        .filter(user -> user.getEmail().equals(request.getEmail()))
+                        .filter(user -> user.getHashedPassword().equals(PasswordHasher.encrypt(request.getPassword())))
+                        .map(user -> new UserTokenResponse(user.getUserId().getValue(), tokenAuthenticator.provideToken(user.getUserId())))
+                        .orElseThrow(() -> new ValidationException("invalid_credentials")));
     }
 
     @RequestMapping(value = "/users", method = GET)
@@ -88,13 +89,13 @@ public class UserController {
                 .load(UserId.of(userId))
                 .thenApplyAsync(user -> user.orElseThrow(ResourceNotFoundException::new))
                 .thenApplyAsync(user -> {
-                    user
-                            .editUserDetails(
-                                    request.getFirstName(),
-                                    request.getLastName(),
-                                    mapCollection(request.getTechnologies(), Technology::valueOf, Collectors.toSet()),
-                                    FieldOfStudy.valueOf(request.getFieldOfStudy()),
-                                    Department.valueOf(request.getDepartment()));
+                    if (!user.getUserId().equals(performer.getUserId())) throw new ResourceForbiddenException();
+                    user.editUserDetails(
+                            request.getFirstName(),
+                            request.getLastName(),
+                            mapCollection(request.getTechnologies(), Technology::valueOf, Collectors.toSet()),
+                            FieldOfStudy.valueOf(request.getFieldOfStudy()),
+                            Department.valueOf(request.getDepartment()));
                     return user;
                 })
                 .thenComposeAsync(userRepository::save)
