@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCollection;
 
 @Repository
 public class MongoJoinRepository implements JoinRepository {
@@ -45,13 +45,13 @@ public class MongoJoinRepository implements JoinRepository {
     public CompletableFuture<List<Join>> getJoinsForProject(String projectId) {
         return repository
                 .findByInvitationAndProjectId(false, projectId)
-                .thenApplyAsync(joinDTOS -> mapCol(joinDTOS, DTODomainConverter::fromJoinDTO, Collectors.toList()));
+                .thenApplyAsync(joinDTOS -> mapCollection(joinDTOS, DTODomainConverter::fromJoinDTO, Collectors.toList()));
     }
 
     @Override
     public CompletableFuture<List<Join>> getInvitationsByUser(String userId) {
         return repository
                 .findByInvitationAndWho(true, userId)
-                .thenApplyAsync(joinDTOS -> mapCol(joinDTOS, DTODomainConverter::fromJoinDTO, Collectors.toList()));
+                .thenApplyAsync(joinDTOS -> mapCollection(joinDTOS, DTODomainConverter::fromJoinDTO, Collectors.toList()));
     }
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCollection;
 
 @Repository
 public class MongoUserRepository implements UserRepository {
@@ -50,6 +50,6 @@ public class MongoUserRepository implements UserRepository {
     }
 
     private List<User> convert(List<UserDTO> userDTOS) {
-        return mapCol(userDTOS, DTODomainConverter::fromUserDTO, Collectors.toList());
+        return mapCollection(userDTOS, DTODomainConverter::fromUserDTO, Collectors.toList());
     }
 }

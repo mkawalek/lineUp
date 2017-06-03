@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCollection;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -63,7 +63,7 @@ public class UserController {
     public CompletableFuture<List<UserDetailsResponse>> getUsers() {
         return userRepository
                 .findAll()
-                .thenApplyAsync(users -> mapCol(users, ApiDomainConverter::toUserResponse, Collectors.toList()));
+                .thenApplyAsync(users -> mapCollection(users, ApiDomainConverter::toUserResponse, Collectors.toList()));
     }
 
     @RequestMapping(value = "/users/{userId}", method = GET)

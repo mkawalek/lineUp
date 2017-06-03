@@ -30,7 +30,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.filterCollection;
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCollection;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
@@ -60,7 +61,7 @@ public class ProjectController {
     public CompletableFuture<List<ProjectResponse>> getAllProjects() {
         return projectRepository
                 .findAll()
-                .thenApplyAsync(projects -> mapCol(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
+                .thenApplyAsync(projects -> mapCollection(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
 
     @RequestMapping(value = "/fieldofstudies", method = GET)
@@ -141,15 +142,15 @@ public class ProjectController {
                                         )
                                         .collect(Collectors.toList())
                 )
-                .thenApplyAsync(users -> users.stream().map(ApiDomainConverter::toUserResponse).collect(Collectors.toList()));
+                .thenApplyAsync(users -> mapCollection(users, ApiDomainConverter::toUserResponse, Collectors.toList()));
     }
 
-    @RequestMapping(value = "/projects/{projectId}/participants", method = DELETE)
-    public CompletableFuture<IdResponse> removeParticipantFromProject(@RequestBody ParticipantEntityRequest request, @PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
+    @RequestMapping(value = "/projects/{projectId}/participants/{userId}", method = DELETE)
+    public CompletableFuture<IdResponse> removeParticipantFromProject(@PathVariable("projectId") String projectId, @PathVariable("userId") String userId, @LoggedUser AuthenticatedUser performer) {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 performer.getUserId(),
-                project -> project.removeParticipant(UserId.of(request.getUserId()))
+                project -> project.removeParticipant(UserId.of(userId))
         );
     }
 
@@ -166,14 +167,15 @@ public class ProjectController {
     public CompletableFuture<List<ProjectResponse>> getCollaboratedProjects(@LoggedUser AuthenticatedUser performer) {
         return projectRepository
                 .findCollaboratedProjects(performer.getUserId())
-                .thenApplyAsync(projects -> mapCol(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
+                .thenApplyAsync(users -> filterCollection(users, p -> !p.getOwner().equals(performer.getUserId()), Collectors.toList()))
+                .thenApplyAsync(projects -> mapCollection(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
 
     @RequestMapping(value = "/projects/me", method = GET)
     public CompletableFuture<List<ProjectResponse>> getProjectsCreatedByMe(@LoggedUser AuthenticatedUser performer) {
         return projectRepository
                 .findByOwner(performer.getUserId())
-                .thenApplyAsync(projects -> mapCol(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
+                .thenApplyAsync(projects -> mapCollection(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
     
 

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCollection;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
@@ -98,14 +98,14 @@ public class JoinsController {
                     else return project;
                 })
                 .thenComposeAsync(p -> joinRepository.getJoinsForProject(p.getProjectId().getValue()))
-                .thenApplyAsync(joins -> mapCol(joins, ApiDomainConverter::toJoinResponse, Collectors.toList()));
+                .thenApplyAsync(joins -> mapCollection(joins, ApiDomainConverter::toJoinResponse, Collectors.toList()));
     }
 
     @RequestMapping(value = "/joins", method = GET)
     public CompletableFuture<List<JoinResponse>> getAllUsersInvitations(@LoggedUser AuthenticatedUser performer) {
         return joinRepository
                 .getInvitationsByUser(performer.getUserId().getValue())
-                .thenApplyAsync(joins -> mapCol(joins, ApiDomainConverter::toJoinResponse, Collectors.toList()));
+                .thenApplyAsync(joins -> mapCollection(joins, ApiDomainConverter::toJoinResponse, Collectors.toList()));
     }
 
 }

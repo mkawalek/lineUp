@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCol;
+import static agh.edu.pl.tai.lineup.infrastructure.utils.Mapper.mapCollection;
 
 @Repository
 public class MongoProjectRepository implements ProjectRepository {
@@ -65,6 +65,6 @@ public class MongoProjectRepository implements ProjectRepository {
     }
 
     private List<Project> convert(List<ProjectDTO> projectDTOS) {
-        return mapCol(projectDTOS, DTODomainConverter::fromProjectDTO, Collectors.toList());
+        return mapCollection(projectDTOS, DTODomainConverter::fromProjectDTO, Collectors.toList());
     }
 }
