@@ -23,7 +23,7 @@ public class TokenUtils implements TokenAuthenticator {
     private String SECRET;
 
     public String provideToken(UserId userId) {
-        return TOKEN_PREFIX + " " + Jwts.builder()
+        return Jwts.builder()
                 .setSubject(userId.getValue())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, getSecret())
