@@ -89,7 +89,7 @@ public class DTODomainConverter {
 
     public static Join fromJoinDTO(JoinDTO joinDTO) {
         return new Join(
-                JoinId.of(joinDTO.getJoinId()),
+                JoinId.of(joinDTO.getId()),
                 UserId.of(joinDTO.getWho()),
                 ProjectId.of(joinDTO.getProjectId()),
                 joinDTO.getInvitation(),

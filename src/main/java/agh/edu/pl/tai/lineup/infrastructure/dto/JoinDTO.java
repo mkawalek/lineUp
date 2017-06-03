@@ -1,16 +1,19 @@
 package agh.edu.pl.tai.lineup.infrastructure.dto;
 
+import org.springframework.data.annotation.Id;
+
 public class JoinDTO {
 
-    private String joinId;
+    @Id
+    private String id;
     private String who;
     private String projectId;
     private Boolean isInvitation;
     private String createdBy;
     private Boolean accepted = false;
 
-    public JoinDTO(String joinId, String who, String projectId, Boolean isInvitation, String createdBy, Boolean accepted) {
-        this.joinId = joinId;
+    public JoinDTO(String id, String who, String projectId, Boolean isInvitation, String createdBy, Boolean accepted) {
+        this.id = id;
         this.who = who;
         this.projectId = projectId;
         this.isInvitation = isInvitation;
@@ -18,12 +21,12 @@ public class JoinDTO {
         this.accepted = accepted;
     }
 
-    public String getJoinId() {
-        return joinId;
+    public String getId() {
+        return id;
     }
 
-    public void setJoinId(String joinId) {
-        this.joinId = joinId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getWho() {
@@ -50,19 +53,19 @@ public class JoinDTO {
         isInvitation = invitation;
     }
 
-    public Boolean getAccepted() {
-        return accepted;
-    }
-
-    public void setAccepted(Boolean accepted) {
-        this.accepted = accepted;
-    }
-
     public String getCreatedBy() {
         return createdBy;
     }
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public Boolean getAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
     }
 }

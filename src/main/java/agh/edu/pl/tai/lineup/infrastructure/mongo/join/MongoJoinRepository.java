@@ -29,7 +29,7 @@ public class MongoJoinRepository implements JoinRepository {
     public CompletableFuture<JoinId> save(Join join) {
         return CompletableFuture
                 .supplyAsync(() -> repository.save(DTODomainConverter.toJoinDTO(join)))
-                .thenApplyAsync(JoinDTO::getJoinId)
+                .thenApplyAsync(JoinDTO::getId)
                 .thenApplyAsync(JoinId::of);
     }
 
