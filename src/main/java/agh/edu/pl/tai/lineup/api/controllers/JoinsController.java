@@ -67,24 +67,21 @@ public class JoinsController {
         return joinRepository
                 .load(JoinId.of(joinId))
                 .thenApplyAsync(join -> join.orElseThrow(ResourceNotFoundException::new))
-                .thenComposeAsync(join -> {
-                    if (!join.getCreatedBy().equals(performer.getUserId())) throw new ResourceForbiddenException();
-                    return projectRepository
-                            .load(join.getProjectId())
-                            .thenApplyAsync(p -> p.orElseThrow(ResourceNotFoundException::new))
-                            .thenApplyAsync(project -> {
-                                if (project.getOwner().equals(performer.getUserId()) && !join.getInvitation()) join.markAsAccepted();
-                                else if (!project.getOwner().equals(performer.getUserId()) && join.getInvitation()) join.markAsAccepted();
-                                else throw new ResourceForbiddenException();
-                                return project;
-                            })
-                            .thenApplyAsync(project -> {
-                                project.addParticipant(join.getWho());
-                                return project;
-                            })
-                            .thenApplyAsync(projectRepository::save)
-                            .thenApplyAsync(p -> join);
-                })
+                .thenComposeAsync(join -> projectRepository
+                        .load(join.getProjectId())
+                        .thenApplyAsync(p -> p.orElseThrow(ResourceNotFoundException::new))
+                        .thenApplyAsync(project -> {
+                            if (project.getOwner().equals(performer.getUserId()) && !join.getInvitation()) join.markAsAccepted();
+                            else if (!project.getOwner().equals(performer.getUserId()) && join.getInvitation()) join.markAsAccepted();
+                            else throw new ResourceForbiddenException();
+                            return project;
+                        })
+                        .thenApplyAsync(project -> {
+                            project.addParticipant(join.getWho());
+                            return project;
+                        })
+                        .thenApplyAsync(projectRepository::save)
+                        .thenApplyAsync(p -> join))
                 .thenComposeAsync(joinRepository::save)
                 .thenApplyAsync(JoinId::getValue)
                 .thenApplyAsync(IdResponse::new); // todo move all below code to some service
@@ -95,19 +92,16 @@ public class JoinsController {
         return joinRepository
                 .load(JoinId.of(joinId))
                 .thenApplyAsync(join -> join.orElseThrow(ResourceNotFoundException::new))
-                .thenComposeAsync(join -> {
-                    if (!join.getCreatedBy().equals(performer.getUserId())) throw new ResourceForbiddenException();
-                    return projectRepository
-                            .load(join.getProjectId())
-                            .thenApplyAsync(p -> p.orElseThrow(ResourceNotFoundException::new))
-                            .thenApplyAsync(project -> {
-                                if (project.getOwner().equals(performer.getUserId()) && !join.getInvitation()) join.markAsDeclined();
-                                else if (!project.getOwner().equals(performer.getUserId()) && join.getInvitation()) join.markAsDeclined();
-                                else throw new ResourceForbiddenException();
-                                return project;
-                            })
-                            .thenApplyAsync(p -> join);
-                })
+                .thenComposeAsync(join -> projectRepository
+                        .load(join.getProjectId())
+                        .thenApplyAsync(p -> p.orElseThrow(ResourceNotFoundException::new))
+                        .thenApplyAsync(project -> {
+                            if (project.getOwner().equals(performer.getUserId()) && !join.getInvitation()) join.markAsDeclined();
+                            else if (!project.getOwner().equals(performer.getUserId()) && join.getInvitation()) join.markAsDeclined();
+                            else throw new ResourceForbiddenException();
+                            return project;
+                        })
+                        .thenApplyAsync(p -> join))
                 .thenComposeAsync(joinRepository::save)
                 .thenApplyAsync(JoinId::getValue)
                 .thenApplyAsync(IdResponse::new); // todo move all below code to some service
