@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(POST, "/users").and().ignoring()
                 .mvcMatchers(POST, "/users/auth").and().ignoring()
                 .mvcMatchers(GET, "/departments").and().ignoring()
-                .mvcMatchers(GET, "/fieldsofstudy");
+                .mvcMatchers(GET, "/fieldofstudies");
     }
 
 }
