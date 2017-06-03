@@ -11,6 +11,7 @@ import agh.edu.pl.tai.lineup.domain.project.ProjectRepository;
 import agh.edu.pl.tai.lineup.domain.project.aggregate.Project;
 import agh.edu.pl.tai.lineup.domain.project.entity.ProjectParticipants;
 import agh.edu.pl.tai.lineup.domain.project.valueobject.ProjectId;
+import agh.edu.pl.tai.lineup.domain.project.valueobject.ProjectStatus;
 import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.Department;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.FieldOfStudy;
@@ -18,6 +19,7 @@ import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 import agh.edu.pl.tai.lineup.infrastructure.RandomIdGenerator;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceForbiddenException;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceNotFoundException;
+import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -111,7 +113,10 @@ public class ProjectController {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 performer.getUserId(),
-                Project::endProject
+                project -> {
+                    if (project.getStatus().equals(ProjectStatus.CLOSED)) throw new ValidationException("project_closed");
+                    else project.endProject();
+                }
         );
     }
 

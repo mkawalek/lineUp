@@ -72,7 +72,7 @@ public class Project {
 
     public void endProject() {
         this.ended = Optional.of(LocalDateTime.now());
-        this.status = ProjectStatus.INACTIVE;
+        this.status = ProjectStatus.CLOSED;
     }
 
     public void setAsInactive() {
