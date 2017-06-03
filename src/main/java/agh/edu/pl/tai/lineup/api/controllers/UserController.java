@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{userId}", method = GET)
-    public CompletableFuture<UserDetailsResponse> getUserDetails(@RequestParam("userId") String userId) {
+    public CompletableFuture<UserDetailsResponse> getUserDetails(@PathVariable("userId") String userId) {
         return userRepository
                 .load(UserId.of(userId))
                 .thenApplyAsync(userOpt -> userOpt.orElseThrow(ResourceNotFoundException::new))
