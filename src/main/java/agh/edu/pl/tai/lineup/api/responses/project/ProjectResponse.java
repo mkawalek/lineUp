@@ -7,23 +7,23 @@ import java.util.Set;
 public class ProjectResponse {
 
     private String projectId;
-    private String name;
+    private String title;
     private String description;
     private String versionControlUrl;
-    private Set<String> projectTechnologies;
-    private Set<String> projectParticipants;
+    private Set<String> technologies;
+    private Set<String> participants;
     private String status;
     private String owner;
     private LocalDateTime createdAt;
     private Optional<LocalDateTime> ended;
 
-    public ProjectResponse(String projectId, String name, String description, String versionControlUrl, Set<String> projectTechnologies, Set<String> projectParticipants, String status, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
+    public ProjectResponse(String projectId, String title, String description, String versionControlUrl, Set<String> technologies, Set<String> participants, String status, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
         this.projectId = projectId;
-        this.name = name;
+        this.title = title;
         this.description = description;
         this.versionControlUrl = versionControlUrl;
-        this.projectTechnologies = projectTechnologies;
-        this.projectParticipants = projectParticipants;
+        this.technologies = technologies;
+        this.participants = participants;
         this.status = status;
         this.owner = owner;
         this.createdAt = createdAt;
@@ -34,8 +34,8 @@ public class ProjectResponse {
         return projectId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getDescription() {
@@ -46,12 +46,12 @@ public class ProjectResponse {
         return versionControlUrl;
     }
 
-    public Set<String> getProjectTechnologies() {
-        return projectTechnologies;
+    public Set<String> getTechnologies() {
+        return technologies;
     }
 
-    public Set<String> getProjectParticipants() {
-        return projectParticipants;
+    public Set<String> getParticipants() {
+        return participants;
     }
 
     public String getStatus() {

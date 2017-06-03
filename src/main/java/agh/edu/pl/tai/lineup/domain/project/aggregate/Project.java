@@ -18,31 +18,31 @@ public class Project {
     private String description;
     private String versionControlUrl;
     private UserId owner;
-    private ProjectTechnologies projectTechnologies;
-    private ProjectParticipants projectParticipants;
+    private ProjectTechnologies technologies;
+    private ProjectParticipants participants;
     private ProjectStatus status = ProjectStatus.INACTIVE;
     private LocalDateTime createdAt = LocalDateTime.now();
     private Optional<LocalDateTime> ended = Optional.empty();
 
-    public Project(ProjectId projectId, String name, String description, String versionControlUrl, UserId owner, ProjectTechnologies projectTechnologies) {
-        validate(name, description, versionControlUrl, projectTechnologies);
+    public Project(ProjectId projectId, String name, String description, String versionControlUrl, UserId owner, ProjectTechnologies technologies) {
+        validate(name, description, versionControlUrl, technologies);
         this.projectId = projectId;
         this.name = name;
         this.description = description;
         this.owner = owner;
-        this.projectTechnologies = projectTechnologies;
+        this.technologies = technologies;
         this.versionControlUrl = versionControlUrl;
-        this.projectParticipants = new ProjectParticipants(Sets.newHashSet(owner));
+        this.participants = new ProjectParticipants(Sets.newHashSet(owner));
     }
 
-    public Project(ProjectId projectId, String name, String description, String versionControlUrl, UserId owner, ProjectTechnologies projectTechnologies, ProjectParticipants projectParticipants, ProjectStatus status, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
+    public Project(ProjectId projectId, String name, String description, String versionControlUrl, UserId owner, ProjectTechnologies technologies, ProjectParticipants participants, ProjectStatus status, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
         this.projectId = projectId;
         this.name = name;
         this.description = description;
         this.versionControlUrl = versionControlUrl;
         this.owner = owner;
-        this.projectTechnologies = projectTechnologies;
-        this.projectParticipants = projectParticipants;
+        this.technologies = technologies;
+        this.participants = participants;
         this.status = status;
         this.createdAt = createdAt;
         this.ended = ended;
@@ -66,7 +66,7 @@ public class Project {
         this.name = name;
         this.description = description;
         this.versionControlUrl = versionControlUrl;
-        this.projectTechnologies = projectTechnologies;
+        this.technologies = projectTechnologies;
     }
 
 
@@ -85,11 +85,11 @@ public class Project {
     }
 
     public void addParticipant(UserId participant) {
-        this.projectParticipants.addParticipant(participant);
+        this.participants.addParticipant(participant);
     }
 
     public void removeParticipant(UserId participant) {
-        this.projectParticipants.removeParticipant(participant);
+        this.participants.removeParticipant(participant);
     }
 
     public ProjectId getProjectId() {
@@ -112,12 +112,12 @@ public class Project {
         return owner;
     }
 
-    public ProjectTechnologies getProjectTechnologies() {
-        return projectTechnologies;
+    public ProjectTechnologies getTechnologies() {
+        return technologies;
     }
 
-    public ProjectParticipants getProjectParticipants() {
-        return projectParticipants;
+    public ProjectParticipants getParticipants() {
+        return participants;
     }
 
     public ProjectStatus getStatus() {

@@ -17,7 +17,7 @@ public interface MongoCRUDProjectRepository extends MongoRepository<ProjectDTO, 
     CompletableFuture<List<ProjectDTO>> findByOwner(String owner);
 
     @Async
-    @Query("{ projectParticipants: ?0 }")
+    @Query("{ participants: ?0 }")
     CompletableFuture<List<ProjectDTO>> findCollaboratingProjects(String userId);
 
 }

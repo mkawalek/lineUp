@@ -8,16 +8,18 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE"
         classpath 'com.netflix.nebula:gradle-lint-plugin:latest.release'
-        classpath 'com.bmuschko:gradle-docker-plugin:3.0.7'
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
     }
 }
+
+group = 'line-up'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'nebula.lint'
-apply plugin: 'com.bmuschko.docker-remote-api'
+apply plugin: 'docker'
 
 jar {
     baseName = 'line-up'
@@ -56,4 +58,16 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = true
+    applicationName = jar.baseName
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
 }
