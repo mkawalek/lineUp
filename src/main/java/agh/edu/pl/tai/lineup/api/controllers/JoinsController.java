@@ -94,7 +94,7 @@ public class JoinsController {
                 .load(ProjectId.of(projectId))
                 .thenApplyAsync(p -> p.orElseThrow(ResourceNotFoundException::new))
                 .thenApplyAsync(project -> {
-                    if (project.getOwner().equals(performer.getUserId())) throw new ResourceForbiddenException();
+                    if (!project.getOwner().equals(performer.getUserId())) throw new ResourceForbiddenException();
                     else return project;
                 })
                 .thenComposeAsync(p -> joinRepository.getJoinsForProject(p.getProjectId().getValue()))
