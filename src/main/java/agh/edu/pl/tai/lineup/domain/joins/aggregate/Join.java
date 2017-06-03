@@ -1,6 +1,7 @@
 package agh.edu.pl.tai.lineup.domain.joins.aggregate;
 
 import agh.edu.pl.tai.lineup.domain.joins.valueobject.JoinId;
+import agh.edu.pl.tai.lineup.domain.joins.valueobject.JoinStatus;
 import agh.edu.pl.tai.lineup.domain.project.valueobject.ProjectId;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 
@@ -11,7 +12,7 @@ public class Join {
     private ProjectId projectId;
     private Boolean isInvitation;
     private UserId createdBy;
-    private Boolean accepted = false;
+    private JoinStatus status = JoinStatus.PENDING;
 
     public Join(JoinId joinId, UserId who, ProjectId projectId, Boolean isInvitation, UserId createdBy) {
         this.joinId = joinId;
@@ -21,8 +22,21 @@ public class Join {
         this.createdBy = createdBy;
     }
 
+    public Join(JoinId joinId, UserId who, ProjectId projectId, Boolean isInvitation, UserId createdBy, JoinStatus status) {
+        this.joinId = joinId;
+        this.who = who;
+        this.projectId = projectId;
+        this.isInvitation = isInvitation;
+        this.createdBy = createdBy;
+        this.status = status;
+    }
+
     public void markAsAccepted() {
-        accepted = true;
+        status = JoinStatus.ACCEPTED;
+    }
+
+    public void markAsDeclined() {
+        status = JoinStatus.DECLINED;
     }
 
     public UserId getWho() {
@@ -37,8 +51,8 @@ public class Join {
         return isInvitation;
     }
 
-    public Boolean getAccepted() {
-        return accepted;
+    public JoinStatus getStatus() {
+        return status;
     }
 
     public JoinId getJoinId() {

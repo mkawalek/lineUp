@@ -2,6 +2,7 @@ package agh.edu.pl.tai.lineup.infrastructure;
 
 import agh.edu.pl.tai.lineup.domain.joins.aggregate.Join;
 import agh.edu.pl.tai.lineup.domain.joins.valueobject.JoinId;
+import agh.edu.pl.tai.lineup.domain.joins.valueobject.JoinStatus;
 import agh.edu.pl.tai.lineup.domain.project.aggregate.Project;
 import agh.edu.pl.tai.lineup.domain.project.entity.ProjectParticipants;
 import agh.edu.pl.tai.lineup.domain.project.entity.ProjectTechnologies;
@@ -83,7 +84,7 @@ public class DTODomainConverter {
                 join.getProjectId().getValue(),
                 join.getInvitation(),
                 join.getCreatedBy().getValue(),
-                join.getAccepted()
+                join.getStatus().name()
         );
     }
 
@@ -93,7 +94,8 @@ public class DTODomainConverter {
                 UserId.of(joinDTO.getWho()),
                 ProjectId.of(joinDTO.getProjectId()),
                 joinDTO.getInvitation(),
-                UserId.of(joinDTO.getCreatedBy())
+                UserId.of(joinDTO.getCreatedBy()),
+                JoinStatus.valueOf(joinDTO.getStatus())
         );
 
     }
