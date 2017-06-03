@@ -62,6 +62,7 @@ public class ProjectController {
     public CompletableFuture<List<ProjectResponse>> getAllProjects() {
         return projectRepository
                 .findAll()
+                .thenApplyAsync(projects -> filterCollection(projects, project -> !project.getStatus().equals(ProjectStatus.CLOSED), Collectors.toList()))
                 .thenApplyAsync(projects -> mapCollection(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
 
@@ -166,6 +167,7 @@ public class ProjectController {
         return projectRepository
                 .findCollaboratedProjects(performer.getUserId())
                 .thenApplyAsync(users -> filterCollection(users, p -> !p.getOwner().equals(performer.getUserId()), Collectors.toList()))
+                .thenApplyAsync(projects -> filterCollection(projects, project -> !project.getStatus().equals(ProjectStatus.CLOSED), Collectors.toList()))
                 .thenApplyAsync(projects -> mapCollection(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
 
@@ -173,6 +175,7 @@ public class ProjectController {
     public CompletableFuture<List<ProjectResponse>> getProjectsCreatedByMe(@LoggedUser AuthenticatedUser performer) {
         return projectRepository
                 .findByOwner(performer.getUserId())
+                .thenApplyAsync(projects -> filterCollection(projects, project -> !project.getStatus().equals(ProjectStatus.CLOSED), Collectors.toList()))
                 .thenApplyAsync(projects -> mapCollection(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
     }
     
