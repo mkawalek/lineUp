@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -65,12 +66,14 @@ public class UserControllerTest {
 
         String postRequestInJSON = convertObjectToJSONFormat(request);
 
-        performPostWithJSON("/users", postRequestInJSON)
-                .andExpect(status().isCreated());
+        MvcResult x = performPostWithJSON("/users", postRequestInJSON)
+                .andExpect(status().isCreated()).andReturn();
 //                .andExpect(jsonPath("$.id", notNullValue()))
 //                .andExpect(jsonPath("$.token", notNullValue()));
 
-
+        System.out.println("@@@@@@@@@@@");
+        System.out.println(x.getResponse());
+        System.out.println("@@@@@@@@@@@");
     }
 
     @Test
@@ -89,7 +92,7 @@ public class UserControllerTest {
 
         performPostWithJSON("/users", postRequestInJSON).andExpect(status().isCreated());
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         performPostWithJSON("/users", postRequestInJSON).andExpect(status().isNotAcceptable());
     }

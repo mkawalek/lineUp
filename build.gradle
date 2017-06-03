@@ -22,7 +22,7 @@ jar {
     version =  '0.1.0'
 }
 
-gradleLint.rules = ['all-dependency']
+gradleLint.rules = ['duplicate-dependency-class', 'overridden-dependency-version', 'unused-dependency']
 
 repositories {
     mavenCentral()
@@ -44,7 +44,7 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
 
     compile 'org.testng:testng:6.8.8'
-    compile 'com.jayway.restassured:rest-assured:2.3.2'
+    compile 'com.jayway.restassured:rest-assured:2.9.0'
 
     testCompile 'com.nanohttpd:nanohttpd:2.2.0'
     testCompile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.50.3'

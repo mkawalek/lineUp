@@ -11,7 +11,7 @@ public interface UserRepository {
 
     CompletableFuture<Optional<User>> load(UserId id);
     CompletableFuture<UserId> save(User user);
-    CompletableFuture<List<User>> findByEmail(String email);
+    CompletableFuture<Optional<User>> findByEmail(String email);
     CompletableFuture<List<User>> findAll();
 
 }

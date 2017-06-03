@@ -37,8 +37,11 @@ public class MongoUserRepository implements UserRepository {
     }
 
     @Override
-    public CompletableFuture<List<User>> findByEmail(String email) {
-        return userRepository.findByEmail(email).thenApplyAsync(this::convert);
+    public CompletableFuture<Optional<User>> findByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .thenApplyAsync(Optional::ofNullable)
+                .thenApplyAsync(user -> user.map(DTODomainConverter::fromUserDTO));
     }
 
     @Override

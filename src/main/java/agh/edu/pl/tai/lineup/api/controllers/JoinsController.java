@@ -68,7 +68,7 @@ public class JoinsController {
                 .thenComposeAsync(join -> {
                     if (!join.getCreatedBy().equals(performer.getUserId())) throw new ResourceForbiddenException();
                     return projectRepository
-     .load(join.getProjectId())
+                            .load(join.getProjectId())
                             .thenApplyAsync(p -> p.orElseThrow(ResourceNotFoundException::new))
                             .thenApplyAsync(project -> {
                                 if (project.getOwner().equals(performer.getUserId()) && !join.getInvitation()) join.markAsAccepted();
