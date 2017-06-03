@@ -24,7 +24,7 @@ public class DTODomainConverter {
         return new User(
                 UserId.of(userDTO.getId()),
                 userDTO.getEmail(),
-                userDTO.getPassword(),
+                userDTO.getHashedPassword(),
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
                 userDTO.getTechnologies().stream().map(Technology::valueOf).collect(Collectors.toSet()),

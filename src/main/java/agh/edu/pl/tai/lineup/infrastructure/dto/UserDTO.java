@@ -9,17 +9,17 @@ public class UserDTO {
     @Id
     private final String id;
     private String email;
-    private String password;
+    private String hashedPassword;
     private String firstName;
     private String lastName;
     private Set<String> technologies;
     private String department;
     private String fieldOfStudy;
 
-    public UserDTO(String id, String email, String password, String firstName, String lastName, Set<String> technologies, String department, String fieldOfStudy) {
+    public UserDTO(String id, String email, String hashedPassword, String firstName, String lastName, Set<String> technologies, String department, String fieldOfStudy) {
         this.id = id;
         this.email = email;
-        this.password = password;
+        this.hashedPassword = hashedPassword;
         this.firstName = firstName;
         this.lastName = lastName;
         this.technologies = technologies;
@@ -35,8 +35,8 @@ public class UserDTO {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
     public String getFirstName() {
