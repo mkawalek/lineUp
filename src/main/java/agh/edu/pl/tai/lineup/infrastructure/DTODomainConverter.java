@@ -49,12 +49,12 @@ public class DTODomainConverter {
     public static Project fromProjectDTO(ProjectDTO projectDTO) {
         return new Project(
                 ProjectId.of(projectDTO.getId()),
-                projectDTO.getName(),
+                projectDTO.getTitle(),
                 projectDTO.getDescription(),
                 projectDTO.getVersionControlUrl(),
                 UserId.of(projectDTO.getOwner()),
-                new ProjectTechnologies(projectDTO.getProjectTechnologies().stream().map(Technology::valueOf).collect(Collectors.toSet())),
-                new ProjectParticipants(projectDTO.getProjectParticipants().stream().map(UserId::of).collect(Collectors.toSet())),
+                new ProjectTechnologies(projectDTO.getTechnologies().stream().map(Technology::valueOf).collect(Collectors.toSet())),
+                new ProjectParticipants(projectDTO.getParticipants().stream().map(UserId::of).collect(Collectors.toSet())),
                 ProjectStatus.valueOf(projectDTO.getProjectStatus()),
                 projectDTO.getCreatedAt(),
                 projectDTO.getEnded()

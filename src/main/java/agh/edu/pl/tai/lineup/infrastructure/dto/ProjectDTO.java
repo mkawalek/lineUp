@@ -10,24 +10,24 @@ public class ProjectDTO {
 
     @Id
     private final String id;
-    private String name;
+    private String title;
     private String description;
     private Optional<String> versionControlUrl;
-    private Set<String> projectTechnologies;
-    private Set<String> projectParticipants;
+    private Set<String> technologies;
+    private Set<String> participants;
     private String projectStatus;
     private String owner;
     private LocalDateTime createdAt;
     private Optional<LocalDateTime> ended;
 
 
-    public ProjectDTO(String id, String name, String description, Optional<String> versionControlUrl, Set<String> projectTechnologies, Set<String> projectParticipants, String projectStatus, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
+    public ProjectDTO(String id, String title, String description, Optional<String> versionControlUrl, Set<String> technologies, Set<String> participants, String projectStatus, String owner, LocalDateTime createdAt, Optional<LocalDateTime> ended) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.description = description;
         this.versionControlUrl = versionControlUrl;
-        this.projectTechnologies = projectTechnologies;
-        this.projectParticipants = projectParticipants;
+        this.technologies = technologies;
+        this.participants = participants;
         this.projectStatus = projectStatus;
         this.owner = owner;
         this.createdAt = createdAt;
@@ -38,8 +38,8 @@ public class ProjectDTO {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getDescription() {
@@ -50,12 +50,12 @@ public class ProjectDTO {
         return versionControlUrl;
     }
 
-    public Set<String> getProjectTechnologies() {
-        return projectTechnologies;
+    public Set<String> getTechnologies() {
+        return technologies;
     }
 
-    public Set<String> getProjectParticipants() {
-        return projectParticipants;
+    public Set<String> getParticipants() {
+        return participants;
     }
 
     public String getProjectStatus() {

@@ -43,8 +43,8 @@ public class ProjectController {
     @RequestMapping(value = "/projects", method = POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     public CompletableFuture<IdResponse> createProject(@RequestBody ProjectEntityRequest request, @LoggedUser AuthenticatedUser user) {
-        Project project = new Project(ProjectId.of(RandomIdGenerator.next()), request.getName(), request.getDescription(),
-                request.getVersionControlUrl(), user.getUserId(), ApiDomainConverter.toProjectTechnologies(request.getProjectTechnologies()));
+        Project project = new Project(ProjectId.of(RandomIdGenerator.next()), request.getTitle(), request.getDescription(),
+                request.getVersionControlUrl(), user.getUserId(), ApiDomainConverter.toProjectTechnologies(request.getTechnologies()));
 
         return projectRepository
                 .save(project)
@@ -81,7 +81,7 @@ public class ProjectController {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 user.getUserId(),
-                project -> project.editProject(request.getName(), request.getDescription(), request.getVersionControlUrl(), ApiDomainConverter.toProjectTechnologies(request.getProjectTechnologies())));
+                project -> project.editProject(request.getTitle(), request.getDescription(), request.getVersionControlUrl(), ApiDomainConverter.toProjectTechnologies(request.getTechnologies())));
     }
 
     @RequestMapping(value = "/projects/{projectId}", method = GET)

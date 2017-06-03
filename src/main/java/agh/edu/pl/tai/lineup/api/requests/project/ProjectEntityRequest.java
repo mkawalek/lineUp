@@ -5,19 +5,19 @@ import java.util.Set;
 
 public class ProjectEntityRequest {
 
-    private String name;
+    private String title;
     private String description;
     private Optional<String> versionControlUrl;
-    private Set<String> projectTechnologies;
+    private Set<String> technologies;
 
     public ProjectEntityRequest() {}
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -28,12 +28,12 @@ public class ProjectEntityRequest {
         this.description = description;
     }
 
-    public Set<String> getProjectTechnologies() {
-        return projectTechnologies;
+    public Set<String> getTechnologies() {
+        return technologies;
     }
 
-    public void setProjectTechnologies(Set<String> projectTechnologies) {
-        this.projectTechnologies = projectTechnologies;
+    public void setTechnologies(Set<String> technologies) {
+        this.technologies = technologies;
     }
 
     public Optional<String> getVersionControlUrl() {
