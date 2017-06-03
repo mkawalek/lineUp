@@ -17,8 +17,8 @@ public interface JoinRepository {
     CompletableFuture<Optional<Join>> load(JoinId joinId);
 
     @Async
-    CompletableFuture<List<Join>> getJoinsForProject(String projectId); // todo isInvitation should be false !
+    CompletableFuture<List<Join>> getJoinsForProject(String projectId);
 
     @Async
-    CompletableFuture<List<Join>> getInvitationsByUser(String userId); // todo isInvitation should be true !
+    CompletableFuture<List<Join>> getInvitationsByUser(String userId);
 }
