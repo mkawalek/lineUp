@@ -10,6 +10,8 @@ import agh.edu.pl.tai.lineup.api.security.LoggedUser;
 import agh.edu.pl.tai.lineup.domain.project.ProjectRepository;
 import agh.edu.pl.tai.lineup.domain.project.aggregate.Project;
 import agh.edu.pl.tai.lineup.domain.project.valueobject.ProjectId;
+import agh.edu.pl.tai.lineup.domain.user.valueobject.Department;
+import agh.edu.pl.tai.lineup.domain.user.valueobject.FieldOfStudy;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
 import agh.edu.pl.tai.lineup.infrastructure.RandomIdGenerator;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceForbiddenException;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -53,6 +56,24 @@ public class ProjectController {
         return projectRepository
                 .findAll()
                 .thenApplyAsync(projects -> mapCol(projects, ApiDomainConverter::toProjectResponse, Collectors.toList()));
+    }
+
+    @RequestMapping(value = "/fieldofstudies", method = GET)
+    public CompletableFuture<List<String>> getAllFieldOfStudies() {
+        return CompletableFuture
+                .supplyAsync(() -> Arrays
+                        .stream(FieldOfStudy.values())
+                        .map(Enum::name)
+                        .collect(Collectors.toList()));
+    }
+
+    @RequestMapping(value = "/departments", method = GET)
+    public CompletableFuture<List<String>> getAllDepartments() {
+        return CompletableFuture
+                .supplyAsync(() -> Arrays
+                .stream(Department.values())
+                .map(Enum::name)
+                .collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/projects/{projectId}", method = PUT)

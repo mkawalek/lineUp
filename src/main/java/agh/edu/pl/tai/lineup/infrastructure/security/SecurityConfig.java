@@ -3,7 +3,6 @@ package agh.edu.pl.tai.lineup.infrastructure.security;
 import agh.edu.pl.tai.lineup.domain.user.TokenAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @EnableScheduling
@@ -28,8 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/users").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/auth").permitAll()
+                .antMatchers(POST, "/users").permitAll()
+                .antMatchers(POST, "/users/auth").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenAuthenticator), BasicAuthenticationFilter.class)
@@ -38,8 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/users")
-        .and().ignoring().antMatchers("/users/auth");
+        web.ignoring()
+                .mvcMatchers(POST, "/users").and().ignoring()
+                .mvcMatchers(POST, "/users/auth").and().ignoring()
+                .mvcMatchers(GET, "/departments").and().ignoring()
+                .mvcMatchers(GET, "/fieldsofstudy");
     }
 
 }

@@ -7,6 +7,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE")
+        classpath 'com.netflix.nebula:gradle-lint-plugin:latest.release'
     }
 }
 
@@ -14,11 +15,14 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'nebula.lint'
 
 jar {
     baseName = 'line-up'
     version =  '0.1.0'
 }
+
+gradleLint.rules = ['all-dependency']
 
 repositories {
     mavenCentral()
@@ -28,7 +32,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile ('org.springframework.boot:spring-boot-starter-web')
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb:1.5.3.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-security'
 
