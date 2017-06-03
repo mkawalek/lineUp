@@ -1,7 +1,6 @@
 package agh.edu.pl.tai.lineup.api.controllers;
 
 import agh.edu.pl.tai.lineup.api.ApiDomainConverter;
-import agh.edu.pl.tai.lineup.api.requests.project.ParticipantEntityRequest;
 import agh.edu.pl.tai.lineup.api.requests.project.ProjectEntityRequest;
 import agh.edu.pl.tai.lineup.api.responses.IdResponse;
 import agh.edu.pl.tai.lineup.api.responses.project.ProjectResponse;
@@ -116,15 +115,6 @@ public class ProjectController {
         );
     }
 
-    @RequestMapping(value = "/projects/{projectId}/participants", method = POST)
-    public CompletableFuture<IdResponse> addParticipantToProject(@RequestBody ParticipantEntityRequest request, @PathVariable("projectId") String projectId, @LoggedUser AuthenticatedUser performer) {
-        return loadMapAndSaveProject(
-                ProjectId.of(projectId),
-                performer.getUserId(),
-                project -> project.addParticipant(UserId.of(request.getUserId()))
-        );
-    }
-
     @RequestMapping(value = "/projects/{projectId}/participants", method = GET)
     public CompletableFuture<List<UserDetailsResponse>> getParticipantsForProject(@PathVariable("projectId") String projectId) {
         return projectRepository
@@ -150,7 +140,10 @@ public class ProjectController {
         return loadMapAndSaveProject(
                 ProjectId.of(projectId),
                 performer.getUserId(),
-                project -> project.removeParticipant(UserId.of(userId))
+                project -> {
+                    if (!project.getOwner().equals(performer.getUserId())) throw new ResourceForbiddenException();
+                    else project.removeParticipant(UserId.of(userId));
+                }
         );
     }
 
