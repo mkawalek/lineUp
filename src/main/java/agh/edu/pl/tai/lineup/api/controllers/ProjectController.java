@@ -17,6 +17,7 @@ import agh.edu.pl.tai.lineup.domain.user.UserRepository;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.Department;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.FieldOfStudy;
 import agh.edu.pl.tai.lineup.domain.user.valueobject.UserId;
+import agh.edu.pl.tai.lineup.domain.valueobject.Technology;
 import agh.edu.pl.tai.lineup.infrastructure.RandomIdGenerator;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceForbiddenException;
 import agh.edu.pl.tai.lineup.infrastructure.utils.exceptions.ResourceNotFoundException;
@@ -79,6 +80,15 @@ public class ProjectController {
         return CompletableFuture
                 .supplyAsync(() -> Arrays
                 .stream(Department.values())
+                .map(Enum::name)
+                .collect(Collectors.toList()));
+    }
+
+    @RequestMapping(value = "/technologies", method = GET)
+    public CompletableFuture<List<String>> getAllTechnologies() {
+        return CompletableFuture
+                .supplyAsync(() -> Arrays
+                .stream(Technology.values())
                 .map(Enum::name)
                 .collect(Collectors.toList()));
     }
