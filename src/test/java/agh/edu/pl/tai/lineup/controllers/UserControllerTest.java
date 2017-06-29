@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     private static final int embeddedMongoMinPort = 30000;
+<<<<<<< HEAD
     private static final int embeddedMongoMaxPort = 31000;
 
     static {
@@ -41,13 +42,20 @@ public class UserControllerTest {
         }
     }
 
+=======
+    private static final int embeddedMongoMaxPort = 30100;
+>>>>>>> 6029fbd3add4762aa1cd53ff72ec91b811c3611b
 
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     @BeforeTest
     public void setUpEmbeddedMongo() throws IOException {
+<<<<<<< HEAD
         System.out.println("KUUUUUUUUUUUUURWA");
+=======
+        arrangeEmbeddedMongo(embeddedMongoMinPort, embeddedMongoMaxPort);
+>>>>>>> 6029fbd3add4762aa1cd53ff72ec91b811c3611b
     }
 
     @AfterTest
@@ -80,6 +88,12 @@ public class UserControllerTest {
 //                .andExpect(jsonPath("$.id", notNullValue()))
 //                .andExpect(jsonPath("$.token", notNullValue()));
 
+<<<<<<< HEAD
+=======
+        System.out.println("@@@@@@@@@@@");
+        System.out.println(x.getResponse());
+        System.out.println("@@@@@@@@@@@");
+>>>>>>> 6029fbd3add4762aa1cd53ff72ec91b811c3611b
     }
 
     @Test

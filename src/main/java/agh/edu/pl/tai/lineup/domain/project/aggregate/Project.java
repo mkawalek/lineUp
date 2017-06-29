@@ -26,8 +26,8 @@ public class Project {
     private Optional<LocalDateTime> ended = Optional.empty();
 
     public Project(ProjectId projectId, String name, String description, String versionControlUrl, UserId owner, ProjectTechnologies technologies, Integer gitHubCollaborators) {
-        this.gitHubCollaborators = gitHubCollaborators;
         validate(name, description, versionControlUrl, technologies);
+        this.gitHubCollaborators = gitHubCollaborators;
         this.projectId = projectId;
         this.name = name;
         this.description = description;
@@ -139,7 +139,4 @@ public class Project {
         return gitHubCollaborators;
     }
 
-    public void setGitHubCollaborators(Integer gitHubCollaborators) {
-        this.gitHubCollaborators = gitHubCollaborators;
-    }
 }

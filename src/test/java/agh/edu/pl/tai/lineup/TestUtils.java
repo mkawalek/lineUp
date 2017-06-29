@@ -8,6 +8,10 @@ import de.flapdoodle.embed.mongo.config.IMongodConfig;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
+<<<<<<< HEAD
+=======
+import de.flapdoodle.embed.process.runtime.Network;
+>>>>>>> 6029fbd3add4762aa1cd53ff72ec91b811c3611b
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -22,6 +26,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+<<<<<<< HEAD
+=======
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+>>>>>>> 6029fbd3add4762aa1cd53ff72ec91b811c3611b
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 public class TestUtils {
@@ -53,11 +61,17 @@ public class TestUtils {
 
         IMongodConfig mongodConfig = new MongodConfigBuilder()
                 .version(Version.Main.PRODUCTION)
+<<<<<<< HEAD
                 .net(new Net(port, false))
                 .build();
 
         System.out.println("WSTAJE MONGO");
 
+=======
+                .net(new Net(port, Network.localhostIsIPv6()))
+                .build();
+
+>>>>>>> 6029fbd3add4762aa1cd53ff72ec91b811c3611b
         try {
             mongodExecutable = starter.prepare(mongodConfig);
             mongodExecutable.start();

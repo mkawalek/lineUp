@@ -51,6 +51,7 @@ public class ProjectController {
         this.gitHubApiRequester = gitHubApiRequester;
     }
 
+
     @RequestMapping(value = "/projects", method = POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     public CompletableFuture<IdResponse> createProject(@RequestBody ProjectEntityRequest request, @LoggedUser AuthenticatedUser user) throws IOException {
