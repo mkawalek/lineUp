@@ -22,7 +22,7 @@ public class GitHubApiRequester {
     private OkHttpClient client = new OkHttpClient();
 
     public Integer getCollaborators(String gitHubUrl) throws IOException {
-        Pattern p = Pattern.compile("(?:https|http)://github.com/([a-zA-Z0-9]*)/([a-zA-Z0-9]*)");
+        Pattern p = Pattern.compile("(?:https|http)://github.com/([a-zA-Z0-9]*)/([a-zA-Z0-9-*^$#%&]*)");
         Matcher m = p.matcher(gitHubUrl);
 
         if (m.matches()) {
