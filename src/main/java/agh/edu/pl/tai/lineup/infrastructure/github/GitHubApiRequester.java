@@ -28,7 +28,7 @@ public class GitHubApiRequester {
         if (m.matches()) {
             Request request = new Request.Builder()
                     .url("https://api.github.com/repos/" + m.group(1) + "/" + m.group(2) + "/collaborators")
-                    .addHeader("Authorization", "token " + environment.getProperty("github-token"))
+                    .addHeader("Authorization", "token " + System.getenv("TOKEN"))
                     .build();
 
             Response response = client.newCall(request).execute();
