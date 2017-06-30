@@ -25,6 +25,8 @@ public class GitHubApiRequester {
         Pattern p = Pattern.compile("(?:https|http)://github.com/([a-zA-Z0-9]*)/([a-zA-Z0-9-*^$#%&]*)");
         Matcher m = p.matcher(gitHubUrl);
 
+        System.out.println("TOKEN ->" + "token " + System.getenv("TOKEN"));
+
         if (m.matches()) {
             Request request = new Request.Builder()
                     .url("https://api.github.com/repos/" + m.group(1) + "/" + m.group(2) + "/collaborators")
